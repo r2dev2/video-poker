@@ -1,4 +1,5 @@
 from stack_of_cards import StackOfCards
+from game import WINNING_HANDS
 
 #===========================================================================
 # Description: A list of Card; used for a player's hand or a deck of cards
@@ -21,7 +22,7 @@ class PokerHand(StackOfCards):
     # TODO
     def sort(self) -> None:
         pass
-
+    
     # TODO
     def handType(self) -> str:
         pass

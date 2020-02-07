@@ -16,28 +16,27 @@ from player import Player
 #    addCard(card) - add card to the player's hand of stack_of_cards
 #    removeCard(pos) - removes a card at the pos number
 #    addMoney(amt) - add amt to player's money
-#    askHoldChoice(dealerCard) - returns players choice of cards to hold with input validation
+#    askHoldChoice() - returns players choice of cards to hold with input validation
 #===========================================================================
 
 class PokerPlayer(Player):
-    # TODO ask what dealerCard is, is it a hand or card
-    def askHoldChoice(self, dealerCard: PokerCard) -> str:
+    def askHoldChoice(self) -> str:
         cards_to_hold = input("Which cards would you like to hold?\n")
         holdlist = cards_to_hold.split(' ')
         # If there are more than 5 cards, try again (input validation)
         if len(holdlist) > 5:
             print("You should have 5 entries at max")
-            return self.askHoldChoice(dealerCard)
+            return self.askHoldChoice()
         # Input Validation by splitting by ' ' and checking if each value is an integer between 1 and 5
         for s in holdlist:
             try:
                 ints = int(s)
             except ValueError:
                 print("Your numbers should be integers between 1 and 5")
-                return self.askHoldChoice(dealerCard)
+                return self.askHoldChoice()
             finally:
                 if 1 <= ints <= 5:
                     continue
                 print("Your numbers should be integers between 1 and 5")
-                return self.askHoldChoice(dealerCard)
+                return self.askHoldChoice()
         return cards_to_hold
