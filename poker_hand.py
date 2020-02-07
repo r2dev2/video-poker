@@ -14,14 +14,14 @@ from stack_of_cards import StackOfCards
 #     - getCard(pos) - returns a Card at the 'pos'
 #     - __str__() - returns string of all the cards in the hand like '4♣ 10♥ A♠'
 #     - sort() - sorts cards according to rank
-#     - handType() - returns if hand is of typing found in pdf
+#     - handType() - returns if hand is of typing found in pdf eg. royal flush
 #===========================================================================
 
 class PokerHand(StackOfCards):
     # TODO
-    def sort():
+    def sort(self) -> None:
         pass
 
     # TODO
-    def handType():
+    def handType(self) -> str:
         pass

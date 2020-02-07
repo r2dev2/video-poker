@@ -6,9 +6,9 @@ Created on Feb 6, 2019
 Description: Classes are done
 
 '''
-from card import Card
-from stack_of_cards import StackOfCards
-from player import Player
+from poker_hand import PokerHand
+from pokercard import PokerCard
+from pokerplayer import PokerPlayer
 
 # These are the winning hands in order of strength
 WINNING_HANDS = [ "Royal Flush", \
@@ -21,11 +21,6 @@ WINNING_HANDS = [ "Royal Flush", \
                   "Two Pairs", \
                   "Pair (Jacks or better)" ]
 
-# make a PokerCard Class inherit from Card
-# class PokerCard(Card):
-
-# make a PokerHand Class
-        
 # make a PokerGame function
 def PokerGame():
         
@@ -41,6 +36,12 @@ def PokerGame():
     
 # add any other helper functions to organize your code nicely
     
+# plays one round of the game
+# return string of results
+# update player's money
+def PokerRound(player: PokerPlayer, deck: PokerHand) -> str:
+    pass
+
 def main():
     PokerGame()
     

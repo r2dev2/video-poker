@@ -1,0 +1,43 @@
+from player import Player
+
+#===========================================================================
+# Description: a card player with money and a hand of stack_of_cards
+#
+# State Attributes
+#    name - string - the name of the player
+#    hand - StackOfCards - a bunch of cards
+#    money - integer - how much money player has
+# Methods
+#    introduce() - prints out message "Hi, my name is ..."
+#    __str__() - returns a string ex. 'Joe: 4d 7c 10s Ah'
+#    getName() - returns the name of the player
+#    getMoney() - returns the money balance
+#    getCard(pos) - returns a Card at the pos number
+#    addCard(card) - add card to the player's hand of stack_of_cards
+#    removeCard(pos) - removes a card at the pos number
+#    addMoney(amt) - add amt to player's money
+#    askHoldChoice(dealerCard) - returns players choice of cards to hold with input validation
+#===========================================================================
+
+class PokerPlayer(Player):
+    # TODO ask what dealerCard is, is it a hand or card
+    def askHoldChoice(self, dealerCard: PokerCard) -> str:
+        cards_to_hold = input("Which cards would you like to hold?\n")
+        holdlist = cards_to_hold.split(' ')
+        # If there are more than 5 cards, try again (input validation)
+        if len(holdlist) > 5:
+            print("You should have 5 entries at max")
+            return self.askHoldChoice(dealerCard)
+        # Input Validation by splitting by ' ' and checking if each value is an integer between 1 and 5
+        for s in holdlist:
+            try:
+                ints = int(s)
+            except ValueError:
+                print("Your numbers should be integers between 1 and 5")
+                return self.askHoldChoice(dealerCard)
+            finally:
+                if 1 <= ints <= 5:
+                    continue
+                print("Your numbers should be integers between 1 and 5")
+                return self.askHoldChoice(dealerCard)
+        return cards_to_hold
