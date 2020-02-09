@@ -20,6 +20,23 @@ def countMaxOccurences(istr: str) -> int:
     # everything but the first character
     return max([times, countMaxOccurences(istr[1:])])
 
+# count number of pairs
+def numPairs(istr: str) -> int:
+    pair = 0
+    blacklist = []
+    for c in istr:
+        # if the character isn't in blacklist
+        # increment pair based upon whether there is a pair
+        if c not in blacklist:
+            haspair = istr.count(c * 2) == 1
+            pair += int(haspair)
+            blacklist.append(c)
+    # if there are 4 occurences of anything, should return 2
+    for c in blacklist:
+        if istr.count(c*4) == 1:
+            return 2
+    return pair
+
 # returns a generator; I don't know how to type annotate that
 # format of (returned value, pass status)
 def testCountMaxOccurences() -> Generic:

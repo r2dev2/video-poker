@@ -1,6 +1,8 @@
+from copy import deepcopy
+
 from stack_of_cards import StackOfCards
 from game import WINNING_HANDS
-from copy import deepcopy
+from common import *
 
 WINNING_HANDS = [ "Royal Flush", \
                   "Straight Flush", \
@@ -39,6 +41,12 @@ class PokerHand(StackOfCards):
         # Sorts a copy to avoid modifying self
         clone = deepcopy(self)
         clone.sort()
+        # convert cards to str
+        strcards = ''.join([str(int(c)) for c in cards])
 
         # Classify hand by rank
+        rankclassification = countMaxOccurences(strcards)
+        if rankclassification == 2 and numPairs(strcards) == 2:
+            return "Two Pairs"
+        
         
