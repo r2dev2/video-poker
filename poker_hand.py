@@ -1,5 +1,16 @@
 from stack_of_cards import StackOfCards
 from game import WINNING_HANDS
+from copy import deepcopy
+
+WINNING_HANDS = [ "Royal Flush", \
+                  "Straight Flush", \
+                  "Four of a Kind", \
+                  "Full House", \
+                  "Flush", \
+                  "Straight", \
+                  "3 of a Kind", \
+                  "Two Pairs", \
+                  "Pair (Jacks or better)" ]
 
 #===========================================================================
 # Description: A list of Card; used for a player's hand or a deck of cards
@@ -25,4 +36,9 @@ class PokerHand(StackOfCards):
     
     # TODO
     def handType(self) -> str:
-        pass
+        # Sorts a copy to avoid modifying self
+        clone = deepcopy(self)
+        clone.sort()
+
+        # Classify hand by rank
+        
