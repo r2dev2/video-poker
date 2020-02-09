@@ -4,10 +4,11 @@ from stack_of_cards import StackOfCards
 from game import WINNING_HANDS
 from common import *
 
-WINNING_HANDS = [ "Royal Flush", 
+# For reference
+WINNING_HANDS = [ "Royal Flush",
                   "Straight Flush", 
                   "Four of a Kind", 
-                  "Full House", 
+                  "Full House", # TODO
                   "Flush", 
                   "Straight", 
                   "3 of a Kind", 
@@ -29,7 +30,7 @@ WINNING_HANDS = [ "Royal Flush",
 #     - getCard(pos) - returns a Card at the 'pos'
 #     - __str__() - returns string of all the cards in the hand like '4♣ 10♥ A♠'
 #     - sort() - sorts cards according to rank
-#     - handType() - returns if hand is of typing found in pdf eg. royal flush
+#     - handType() - returns what hand eg. royal flush
 #===========================================================================
 
 class PokerHand(StackOfCards):
@@ -64,14 +65,18 @@ class PokerHand(StackOfCards):
         # Straight, not a flush
         isstraight = True
         for i, rank in enumerate(listcards):
-            if i == 4:
+            # avoid index out of bounds
+            if i == len(listcards) - 1:
                 break
+            # see if cards are sequential
             trueforcurrentcard = rank + 1 == listcards[i + 1]
-            if not trueforcurrentcard and i == 3 and listcards[4] == 14:
+            if not trueforcurrentcard and i == len(listcards) - 2 and listcards[-1] == 14:
                 trueforcurrentcard = listcards[0] == 2
             if not trueforcurrentcard:
                 isstraight = False
                 break
+        if isstraight and classification > 5:
+            classification = 5
 
         # Flush
         # List -> set removes duplicates
@@ -79,4 +84,13 @@ class PokerHand(StackOfCards):
         if isflush and classification > 4:
             classification = 4
         
-        # 
+        # Straight Flush
+        if isflush and isstraight:
+            classification = 1
+
+        # Royal Flush
+        if classification == 1:
+            allroyals = len([int(c) for c in clone.cards if c >= 10]) == len(clone.cards)
+            classification -= int(allroyals)
+
+        
