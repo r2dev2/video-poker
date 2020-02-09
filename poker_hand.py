@@ -8,7 +8,7 @@ from common import *
 WINNING_HANDS = [ "Royal Flush",
                   "Straight Flush", 
                   "Four of a Kind", 
-                  "Full House", # TODO
+                  "Full House",
                   "Flush", 
                   "Straight", 
                   "3 of a Kind", 
@@ -50,6 +50,14 @@ class PokerHand(StackOfCards):
 
         # Classify hand by rank
         rankclassification = countMaxOccurences(strcards)
+
+        # Full house
+        if classification > 3:
+            if rankclassification == 3:
+                if [listcards[2]] * 2 == listcards[:2] and listcards[3] == listcards[4] or \
+                    [listcards[2]]* 2 == listcards[3:] and listcards[0] == listcards[1]:
+                    return "Full House"
+        # Two Pairs
         if rankclassification == 2 and numPairs(strcards) == 2:
             return "Two Pairs"
         if rankclassification == 2:
@@ -57,6 +65,8 @@ class PokerHand(StackOfCards):
                 [13, 13] in listcards or [14, 14] in listcards:
             if not jacksorbetter:
                 rankclassification = 1
+
+        # Classification is now the index of the Winning hand
         classification = WINNING_HANDS.index(
             ["Nothing", "Pair (Jacks or better", "3 of a Kind", "Four of a Kind"][rankclassification - 1]
             )
@@ -92,5 +102,3 @@ class PokerHand(StackOfCards):
         if classification == 1:
             allroyals = len([int(c) for c in clone.cards if c >= 10]) == len(clone.cards)
             classification -= int(allroyals)
-
-        
