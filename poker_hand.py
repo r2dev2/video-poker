@@ -106,6 +106,8 @@ class PokerHand(StackOfCards):
 
 
 def main():
+    #suits: SUIT = ['♥', '♦', '♣', '♠']
+    #RANK = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
     hand = PokerHand()
     hand.cards = [
         PokerCard("10", '♥'),
@@ -114,7 +116,30 @@ def main():
         PokerCard("K", '♥'),
         PokerCard("A", '♥')
     ]
-    print(hand.handType())
-
+    #four of a kind
+    hand2 = PokerHand()
+    hand2.cards = [
+        PokerCard("K", '♥'),
+        PokerCard("K", '♦'),
+        PokerCard("K", '♣'),
+        PokerCard("K", '♠'),
+        PokerCard("J", '♥'), 
+    ]
+    print("hand 1s type is ", hand.handType(), "it should be royal flush")
+    print("hand 2's type is", hand2.handType(), "it should be 'four of a kind'")
+    #full house: 
+    # A full house, also known as a 
+    # full boat or a boat (and originally called a full hand), 
+    # is a hand that contains three cards of one rank and two 
+    # cards of another rank
+    hand3 = PokerHand()
+    hand3.cards = [
+        PokerCard("10", '♥'),
+        PokerCard("10", '♦'),
+        PokerCard("10", '♣'),
+        PokerCard("3",'♥' ),
+        PokerCard("3", '♣')
+    ]
+    print("hand3's type is ", hand3.handType(), "it should be 'three of a kind'")
 if __name__ == "__main__":
     main()

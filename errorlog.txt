@@ -1,0 +1,2 @@
+not able to give hand based on rank eg 4 of kind
+the problem likely lies in max occurence(in common.py)
