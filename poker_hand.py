@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 from stack_of_cards import StackOfCards
-from game import WINNING_HANDS
+from pokercard import PokerCard
 from common import *
 
 # For reference
@@ -34,11 +34,9 @@ WINNING_HANDS = [ "Royal Flush",
 #===========================================================================
 
 class PokerHand(StackOfCards):
-    # TODO
     def sort(self) -> None:
-        pass
+        self.cards.sort()
     
-    # TODO
     def handType(self) -> str:
         classification = "Nothing"
         # Sorts a copy to avoid modifying self
@@ -52,17 +50,16 @@ class PokerHand(StackOfCards):
         rankclassification = countMaxOccurences(strcards)
 
         # Full house
-        if classification > 3:
-            if rankclassification == 3:
-                if [listcards[2]] * 2 == listcards[:2] and listcards[3] == listcards[4] or \
-                    [listcards[2]]* 2 == listcards[3:] and listcards[0] == listcards[1]:
-                    return "Full House"
+        if rankclassification == 3:
+            if [listcards[2]] * 2 == listcards[:2] and listcards[3] == listcards[4] or \
+                [listcards[2]]* 2 == listcards[3:] and listcards[0] == listcards[1]:
+                return "Full House"
         # Two Pairs
         if rankclassification == 2 and numPairs(strcards) == 2:
             return "Two Pairs"
         if rankclassification == 2:
             jacksorbetter = [11, 11] in listcards or [12, 12] in listcards or \
-                [13, 13] in listcards or [14, 14] in listcards:
+                [13, 13] in listcards or [14, 14] in listcards
             if not jacksorbetter:
                 rankclassification = 1
 
@@ -102,3 +99,20 @@ class PokerHand(StackOfCards):
         if classification == 1:
             allroyals = len([int(c) for c in clone.cards if c >= 10]) == len(clone.cards)
             classification -= int(allroyals)
+
+        return WINNING_HANDS[classification]
+
+
+def main():
+    hand = PokerHand()
+    hand.cards = [
+        PokerCard("10", '♥'),
+        PokerCard("J", '♥'),
+        PokerCard("Q", '♥'),
+        PokerCard("K", '♥'),
+        PokerCard("A", '♥')
+    ]
+    print(hand.handType())
+
+if __name__ == "__main__":
+    main()

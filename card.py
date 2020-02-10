@@ -47,7 +47,13 @@ class Card:
         return(self.suit)
     
     def __int__(self):
-        return slef.getValue()
+        return self.getValue()
 
     def __str__(self):
         return('{}{}'.format(self.rank, self.suit)) 
+
+def main():
+    print(int(Card('A', '♥')))
+
+if __name__ == "__main__":
+    main()

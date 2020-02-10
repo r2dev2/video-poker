@@ -18,10 +18,9 @@ class PokerCard(Card):
 
     # change value of 1 to 14
     def getValue(self):
-        old = super().getValue()
-        return 14 if old == 1 else old
+        return super().getValue() if self.rank != 1 else 14
 
-    def __eq__(self, other: PokerCard):
+    def __eq__(self, other):
         return self.rank == other.rank
 
     def __lt__(self, other):
