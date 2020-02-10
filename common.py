@@ -1,39 +1,39 @@
 from typing import Generic
 
 # counts the highest duplicity reached 
-# eg. countMaxOccurences("11222") -> 3, countMaxOccurences("123") -> 1
-def countMaxOccurences(istr: str) -> int:
+# eg. countMaxOccurences(list("11222")) -> 3, countMaxOccurences(list("123")) -> 1
+def countMaxOccurences(ilst: list) -> int:
     # Edge case
-    if len(istr) <= 1:
+    if len(ilst) <= 1:
         return 1
     # Base case
-    if len(istr) == 2:
-        return int(istr[0] == istr[1]) + 1
+    if len(ilst) == 2:
+        return int(ilst[0] == ilst[1]) + 1
     # Count maximum duplicity of first character
     times = 1
-    for i in range(2, len(istr)):
-        ocurrencesofi = istr.count(istr[0] * i)
+    for i in range(2, len(ilst)):
+        ocurrencesofi = ilst.count(ilst[0] * i)
         if ocurrencesofi == 0:
             break
         times = i
     # Get the highest between the current max duplicity and the max duplicity of
     # everything but the first character
-    return max([times, countMaxOccurences(istr[1:])])
+    return max([times, countMaxOccurences(ilst[1:])])
 
 # count number of pairs
-def numPairs(istr: str) -> int:
+def numPairs(ilst: list) -> int:
     pair = 0
     blacklist = []
-    for c in istr:
+    for c in ilst:
         # if the character isn't in blacklist
         # increment pair based upon whether there is a pair
         if c not in blacklist:
-            haspair = istr.count(c * 2) == 1
+            haspair = ilst.count(c * 2) == 1
             pair += int(haspair)
             blacklist.append(c)
     # if there are 4 occurences of anything, should return 2
     for c in blacklist:
-        if istr.count(c*4) == 1:
+        if ilst.count(c*4) == 1:
             return 2
     return pair
 
@@ -41,9 +41,9 @@ def numPairs(istr: str) -> int:
 # format of (returned value, pass status)
 def testCountMaxOccurences() -> Generic:
     tests = [
-        "1222331",
-        "123421",
-        "736122"
+        list("1222331"),
+        list("123421"),
+        list("736122")
     ]
     expectedresults = [
         3,

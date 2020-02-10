@@ -18,10 +18,18 @@ class PokerCard(Card):
 
     # change value of 1 to 14
     def getValue(self):
-        return super().getValue() if self.rank != 1 else 14
+        return super().getValue() if self.rank != 'A' else 14
 
     def __eq__(self, other):
-        return self.rank == other.rank
+        return int(self) == int(other)
 
     def __lt__(self, other):
-        return self.rank < other.rank
+        return int(self) < int(other)
+
+def main():
+    # Testing if Ace turns to 14
+    pc = PokerCard('A', '♦')
+    print(int(pc))
+
+if __name__ == "__main__":
+    main()

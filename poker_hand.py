@@ -41,13 +41,16 @@ class PokerHand(StackOfCards):
         classification = "Nothing"
         # Sorts a copy to avoid modifying self
         clone = deepcopy(self)
+        print(clone)
         clone.sort()
+        print(clone)
         # convert cards to str
         listcards = [str(int(c)) for c in clone.cards]
         strcards = ''.join(listcards)
 
         # Classify hand by rank
-        rankclassification = countMaxOccurences(strcards)
+        print(listcards)
+        rankclassification = countMaxOccurences(listcards)
 
         # Full house
         if rankclassification == 3:
@@ -57,6 +60,7 @@ class PokerHand(StackOfCards):
         # Two Pairs
         if rankclassification == 2 and numPairs(strcards) == 2:
             return "Two Pairs"
+        # Change pair to pair (Jacks or better)
         if rankclassification == 2:
             jacksorbetter = [11, 11] in listcards or [12, 12] in listcards or \
                 [13, 13] in listcards or [14, 14] in listcards
@@ -67,17 +71,22 @@ class PokerHand(StackOfCards):
         classification = WINNING_HANDS.index(
             ["Nothing", "Pair (Jacks or better", "3 of a Kind", "Four of a Kind"][rankclassification - 1]
             )
+
+        print(rankclassification, classification)
         
         # Classify hand by flush
         # Straight, not a flush
         isstraight = True
-        for i, rank in enumerate(listcards):
+        for i, card in enumerate(listcards):
+            rank = int(card)
             # avoid index out of bounds
             if i == len(listcards) - 1:
                 break
             # see if cards are sequential
-            trueforcurrentcard = rank + 1 == listcards[i + 1]
-            if not trueforcurrentcard and i == len(listcards) - 2 and listcards[-1] == 14:
+            trueforcurrentcard = rank + 1 == int(listcards[i + 1])
+            print(trueforcurrentcard, i, rank, listcards[-1])
+            if not trueforcurrentcard and i == len(listcards) - 2 and int(listcards[-1]) == '14':
+                print("yolo")
                 trueforcurrentcard = listcards[0] == 2
             if not trueforcurrentcard:
                 isstraight = False
@@ -97,7 +106,7 @@ class PokerHand(StackOfCards):
 
         # Royal Flush
         if classification == 1:
-            allroyals = len([int(c) for c in clone.cards if c >= 10]) == len(clone.cards)
+            allroyals = len([int(c) for c in clone.cards if int(c) >= 10]) == len(clone.cards)
             classification -= int(allroyals)
 
         return WINNING_HANDS[classification]
