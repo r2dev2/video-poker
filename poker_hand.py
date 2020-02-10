@@ -41,15 +41,12 @@ class PokerHand(StackOfCards):
         classification = "Nothing"
         # Sorts a copy to avoid modifying self
         clone = deepcopy(self)
-        print(clone)
         clone.sort()
-        print(clone)
         # convert cards to str
         listcards = [str(int(c)) for c in clone.cards]
         strcards = ''.join(listcards)
 
         # Classify hand by rank
-        print(listcards)
         rankclassification = countMaxOccurences(listcards)
 
         # Full house
@@ -71,8 +68,6 @@ class PokerHand(StackOfCards):
         classification = WINNING_HANDS.index(
             ["Nothing", "Pair (Jacks or better", "3 of a Kind", "Four of a Kind"][rankclassification - 1]
             )
-
-        print(rankclassification, classification)
         
         # Classify hand by flush
         # Straight, not a flush
@@ -84,9 +79,7 @@ class PokerHand(StackOfCards):
                 break
             # see if cards are sequential
             trueforcurrentcard = rank + 1 == int(listcards[i + 1])
-            print(trueforcurrentcard, i, rank, listcards[-1])
             if not trueforcurrentcard and i == len(listcards) - 2 and int(listcards[-1]) == '14':
-                print("yolo")
                 trueforcurrentcard = listcards[0] == 2
             if not trueforcurrentcard:
                 isstraight = False
