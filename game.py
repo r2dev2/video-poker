@@ -6,6 +6,9 @@ Created on Feb 6, 2019
 Description: Classes are done
 
 '''
+
+# Ronak Badhe, Karthik Bhattaram
+# Snapshot comment: finished base classes, base snarf
 from poker_hand import PokerHand
 from pokercard import PokerCard
 from pokerplayer import PokerPlayer
