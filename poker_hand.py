@@ -16,6 +16,7 @@ WINNING_HANDS = [ "Royal Flush",
                   "Pair (Jacks or better)",
                   "Nothing" ]
 
+
 #===========================================================================
 # Description: A list of Card; used for a player's hand or a deck of cards
 #
@@ -140,6 +141,18 @@ def main():
         PokerCard("3",'♥' ),
         PokerCard("3", '♣')
     ]
+    '''
+    "Royal Flush" : 250
+    "Straight Flush" : 50
+    "Four of a Kind" : 25
+    "Full House" : 9
+    "Flush" : 6
+    "Straight" : 4
+    "3 of a Kind" : 3
+    "Two Pairs" : 2
+    "Pair (Jacks or better)" : 1
+    '''
+
     # Karthik, it should be full house, 1 triple and 1 double
     print("hand3's type is ", hand3.handType(), "it should be 'full house'")
 if __name__ == "__main__":

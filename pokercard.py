@@ -20,6 +20,9 @@ class PokerCard(Card):
     def getValue(self):
         return super().getValue() if self.rank != 'A' else 14
 
+    def __int__(self):
+        return self.getValue()
+
     def __eq__(self, other):
         return int(self) == int(other)
 

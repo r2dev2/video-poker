@@ -13,7 +13,6 @@ Edited on Feb 4, 2020
 # Methods
 #   getValue() - returns an integer from 1-13 depending on the rank of the card
 #   __str__() - returns a string like '4♦' for 4 of diamonds
-#   __int__() - equivalent of getValue() but can be called with int(instance)
 #===========================================================================
 class Card:
     
@@ -45,9 +44,6 @@ class Card:
     
     def getSuit(self):   
         return(self.suit)
-    
-    def __int__(self):
-        return self.getValue()
 
     def __str__(self):
         return('{}{}'.format(self.rank, self.suit)) 
