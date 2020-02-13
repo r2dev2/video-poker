@@ -44,6 +44,7 @@ class PokerHand(StackOfCards):
         clone.sort()
         # convert cards to str
         listcards = [str(int(c)) for c in clone.cards]
+        print(listcards)
         strcards = ''.join(listcards)
 
         # Classify hand by rank
@@ -68,6 +69,8 @@ class PokerHand(StackOfCards):
         classification = WINNING_HANDS.index(
             ["Nothing", "Pair (Jacks or better", "3 of a Kind", "Four of a Kind"][rankclassification - 1]
             )
+
+        print(classification)
         
         # Classify hand by flush
         # Straight, not a flush
@@ -125,7 +128,7 @@ def main():
         PokerCard("K", '♠'),
         PokerCard("J", '♥'), 
     ]
-    print("hand 1s type is ", hand.handType(), "it should be royal flush")
+    print("hand 1s type is", hand.handType(), "it should be royal flush")
     print("hand 2's type is", hand2.handType(), "it should be 'four of a kind'")
     #full house: 
     # A full house, also known as a 

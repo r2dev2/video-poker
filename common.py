@@ -1,5 +1,11 @@
 from typing import Generic
 
+# returns if a list is found in a bigger list
+def is_in(small: list, big: list) -> bool:
+    if len(small) == len(big):
+        return small == big
+    return big[:len(small)] == small or is_in(small, big[1:])
+
 # counts the highest duplicity reached 
 # eg. countMaxOccurences(list("11222")) -> 3, countMaxOccurences(list("123")) -> 1
 def countMaxOccurences(ilst: list) -> int:
@@ -11,9 +17,9 @@ def countMaxOccurences(ilst: list) -> int:
         return int(ilst[0] == ilst[1]) + 1
     # Count maximum duplicity of first character
     times = 1
-    for i in range(2, len(ilst)):
-        ocurrencesofi = ilst.count(ilst[0] * i)
-        if ocurrencesofi == 0:
+    for i in range(2, 5):
+        ioccurs = is_in([ilst[0]] * i, ilst)
+        if not ioccurs:
             break
         times = i
     # Get the highest between the current max duplicity and the max duplicity of
