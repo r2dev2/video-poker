@@ -2,6 +2,8 @@ from typing import Generic
 
 # returns if a list is found in a bigger list
 def is_in(small: list, big: list) -> bool:
+    if len(small) > len(big):
+        return False
     if len(small) == len(big):
         return small == big
     return big[:len(small)] == small or is_in(small, big[1:])
@@ -49,12 +51,16 @@ def testCountMaxOccurences() -> Generic:
     tests = [
         list("1222331"),
         list("123421"),
-        list("736122")
+        list("736122"),
+        ['12', '12', '12', '12', '10'],
+        ['11', '13', '13', '13', '13']
     ]
     expectedresults = [
         3,
         1,
-        2
+        2,
+        4,
+        4
     ]
 
     for index, t in enumerate(tests):

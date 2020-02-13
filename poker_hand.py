@@ -44,7 +44,6 @@ class PokerHand(StackOfCards):
         clone.sort()
         # convert cards to str
         listcards = [str(int(c)) for c in clone.cards]
-        print(listcards)
         strcards = ''.join(listcards)
 
         # Classify hand by rank
@@ -69,8 +68,6 @@ class PokerHand(StackOfCards):
         classification = WINNING_HANDS.index(
             ["Nothing", "Pair (Jacks or better", "3 of a Kind", "Four of a Kind"][rankclassification - 1]
             )
-
-        print(classification)
         
         # Classify hand by flush
         # Straight, not a flush
@@ -143,6 +140,7 @@ def main():
         PokerCard("3",'♥' ),
         PokerCard("3", '♣')
     ]
-    print("hand3's type is ", hand3.handType(), "it should be 'three of a kind'")
+    # Karthik, it should be full house, 1 triple and 1 double
+    print("hand3's type is ", hand3.handType(), "it should be 'full house'")
 if __name__ == "__main__":
     main()
