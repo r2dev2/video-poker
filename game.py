@@ -69,8 +69,11 @@ def PokerRound(player: PokerPlayer, deck: PokerHand) -> str:
     
     '''
     print("{}: {}".format(player.name, player.hand))
-    cardstohold = [int(c) for c in player.askHoldChoice().split('')
-
+    rawcards = player.askHoldChoice().split(' ')
+    cardstohold = map(int, rawcards)
+    #now add additional cards
+    dealtcard = deck.deal()
+    player.addCard(dealtcard)
 
 def main():
     PokerGame()
