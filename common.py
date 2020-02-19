@@ -2,9 +2,9 @@ from typing import Generic
 
 # returns if a list is found in a bigger list
 def is_in(small: list, big: list) -> bool:
+    
     if len(small) > len(big):
         return False
-        
     if len(small) == len(big):
         return small == big
     return big[:len(small)] == small or is_in(small, big[1:])
