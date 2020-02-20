@@ -68,9 +68,9 @@ def testCountMaxOccurences() -> Generic:
         result = countMaxOccurences(t)
         yield result, result == expectedresults[index] 
 
-def main():
+def commonmain():
     for ispass in testCountMaxOccurences():
         print(ispass)
 
 if __name__ == "__main__":
-    main()
+    commonmain()

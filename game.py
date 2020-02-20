@@ -50,7 +50,7 @@ def PokerGame():
         "Pair (Jacks or better)" : 1,
         "Nothing": 0
         }
-    
+    #PokerRound()
 # add any other helper functions to organize your code nicely
     
 # plays one round of the game
@@ -62,21 +62,42 @@ def PokerRound(player: PokerPlayer, deck: PokerHand) -> str:
     explanation of program logic
     Take in the poker player's hand from the 52 card deck
     Ask for what cards they want to hold
-    Remove the cards that they do not want to hold
-    Fill in the blanks with cards from the shuffled deck
+    Add cards from the deck to said card
     Check hand type
     Output the hand type
     
     '''
     print("{}: {}".format(player.name, player.hand))
     rawcards = player.askHoldChoice().split(' ')
-    cardstohold = map(int, rawcards)
+    cardsToHold = [player.getCard(int(c) - 1) for c in rawcards]
+    #player hand = cardstohold
+
     #now add additional cards
-    dealtcard = deck.deal()
-    player.addCard(dealtcard)
-    
+    while len(cardsToHold) < 5:
+        dealtcard = deck.deal()
+        cardsToHold.append(dealtcard)
+    newHand = PokerHand()
+    newHand.cards = cardsToHold[:]
+    #make a new poker_hand
+    player.hand = newHand
+    hand_type = player.hand.handType()
+    return hand_type
+
 def main():
-    PokerGame()
+    hand = PokerHand()
+    hand.cards = [
+        PokerCard("10", '♥'),
+        PokerCard("J", '♥'),
+        PokerCard("Q", '♥'),
+        PokerCard("K", '♥'),
+        PokerCard("A", '♥')
+    ]
+    deck = PokerHand()
+    for i in ['A', '1', '2', '3', '4', '5', '6', '7','8', '9', '10', 'J', 'Q', 'K']:
+        for j in ['♥', '♦', '♣', '♠']:
+            deck.cards.append(PokerCard(i, j))
+    p = PokerPlayer("Yudachi", 100000000, hand)
+    print(PokerRound(p, hand))
     
 if __name__ == "__main__":
     main()

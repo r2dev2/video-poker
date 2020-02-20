@@ -39,5 +39,5 @@ class PokerPlayer(Player):
                     continue
                 print("Your numbers should be integers between 1 and 5")
                 return self.askHoldChoice()
-        return cards_to_holdato100
+        return cards_to_hold
 
