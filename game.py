@@ -25,19 +25,10 @@ WINNING_HANDS = [ "Royal Flush", \
                   "Pair (Jacks or better)" ]
 
 # make a PokerGame function
+def valid_continue_input(inpt):
+    return inpt == 'Y' or inpt == 'N'
+    
 def PokerGame():
-        
-    # make the player
-    #player = PokerPlayer("Player", 1)
-    
-    # make a deck of card
-    # deck = PokerHand()  # make empty deck
-    # add the 52-cards and shuffle
-    
-    # make rest of the game
-    #pseudocode for the game
-    #
-    print("Poker Game!! Let's Go!")
     credits_for_hand = {
         "Royal Flush" : 250,
         "Straight Flush" : 50,
@@ -50,6 +41,38 @@ def PokerGame():
         "Pair (Jacks or better)" : 1,
         "Nothing": 0
         }
+    # make the player
+    #player = PokerPlayer("Player", 1)
+    
+    # make a deck of cards
+    deck = PokerHand()
+    SUIT = ['♥', '♦', '♣', '♠']
+    RANK = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+    for s in SUIT:
+        for r in RANK:
+            deck.add(PokerCard(r, s))
+    # shuffle
+    deck.shuffle()
+    # make rest of the game
+    #pseudocode for the game
+    #
+    print("Poker Game!! Let's Go!")
+    name = input("What is your name? ")
+    print("Hello %s, let's begin" % name)
+    money = int(input("How many credits do you have?"))
+    print("You have %d credits" % money)
+    print("%s:" % name, money)
+    #deal 5 cards
+    hand = PokerHand()
+    for i in range(5):
+        hand.add(deck.deal())
+    player = PokerPlayer(name, money, hand)
+    #PokerRound(player, deck)
+    inpt = input("Shall we play?")
+    while not valid_continue_input(inpt):
+        print("please enter a valid input, ('Y' or 'N') ")
+        inpt = input("Shall we play?")
+    
     #PokerRound()
 # add any other helper functions to organize your code nicely
     
