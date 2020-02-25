@@ -98,6 +98,10 @@ def PokerGame() -> None:
             inpt = input("Shall we continue? ")
         if inpt == 'N':
             break
+        player.hand = PokerHand()
+        deck = create_deck()#replaces the old (incomplete) deck with a new one for the next poker round
+        for i in range(5):
+            player.hand.add(deck.deal())
     
     
     #PokerRound()
@@ -121,6 +125,10 @@ def PokerRound(player: PokerPlayer, deck: PokerHand) -> str:
     rawcards = player.askHoldChoice().split(' ')
     cardsToHold = [player.getCard(int(c) - 1) for c in rawcards]
     #player hand = cardstohold
+
+    testhand = PokerHand()
+    testhand.cards = cardsToHold
+    print("You held:", testhand)
 
     #now add additional cards
     while len(cardsToHold) < 5:

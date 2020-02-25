@@ -1,4 +1,5 @@
 from player import Player
+from poker_hand import PokerHand
 
 #===========================================================================
 # Description: a card player with money and a hand of stack_of_cards
@@ -22,6 +23,8 @@ from player import Player
 class PokerPlayer(Player):
     def askHoldChoice(self) -> str:
         cards_to_hold = input("Which cards would you like to hold?\n")
+        if len(cards_to_hold) == 0:
+            return ''
         holdlist = cards_to_hold.split(' ')
         # If there are more than 5 cards, try again (input validation)
         if len(holdlist) > 5:
@@ -34,9 +37,12 @@ class PokerPlayer(Player):
             except ValueError:
                 print("Your numbers should be integers between 1 and 5 inclusive")
                 return self.askHoldChoice()
-            finally:
-                if not 1 <= ints <= 5:
-                    print("Your numbers should be integers between 1 and 5 inclusive")
-                    return self.askHoldChoice()
+            if not 1 <= ints <= 5:
+                print("Your numbers should be integers between 1 and 5 inclusive")
+                return self.askHoldChoice()
         return cards_to_hold
 
+
+if __name__ == "__main__":
+    player = PokerPlayer("Kwarthik", 42069, PokerHand())
+    print(player.askHoldChoice())
