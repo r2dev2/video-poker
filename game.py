@@ -25,10 +25,23 @@ WINNING_HANDS = [ "Royal Flush", \
                   "Pair (Jacks or better)" ]
 
 # make a PokerGame function
-def valid_continue_input(inpt):
+def valid_continue_input(inpt: str) -> bool:
     return inpt == 'Y' or inpt == 'N'
-    
-def PokerGame():
+
+# creates a deck instance of type PokerHand
+def create_deck() -> PokerHand:
+    deck = PokerHand()
+    SUIT = ['♥', '♦', '♣', '♠']
+    RANK = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+    for s in SUIT:
+        for r in RANK:
+            deck.add(PokerCard(r, s))
+    # shuffle
+    deck.shuffle()
+    return deck
+
+# Poker Game text solo version
+def PokerGame() -> None:
     credits_for_hand = {
         "Royal Flush" : 250,
         "Straight Flush" : 50,
@@ -39,39 +52,53 @@ def PokerGame():
         "3 of a Kind" : 3,
         "Two Pairs" : 2,
         "Pair (Jacks or better)" : 1,
-        "Nothing": 0
+        "Nothing": -1
         }
     # make the player
     #player = PokerPlayer("Player", 1)
     
     # make a deck of cards
-    deck = PokerHand()
-    SUIT = ['♥', '♦', '♣', '♠']
-    RANK = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
-    for s in SUIT:
-        for r in RANK:
-            deck.add(PokerCard(r, s))
-    # shuffle
-    deck.shuffle()
+    deck = create_deck()
     # make rest of the game
     #pseudocode for the game
     #
     print("Poker Game!! Let's Go!")
     name = input("What is your name? ")
     print("Hello %s, let's begin" % name)
-    money = int(input("How many credits do you have?"))
+    money = int(input("How many credits do you have? "))
     print("You have %d credits" % money)
-    print("%s:" % name, money)
-    #deal 5 cards
+
+    # deal 5 cards and create player
     hand = PokerHand()
     for i in range(5):
         hand.add(deck.deal())
     player = PokerPlayer(name, money, hand)
-    #PokerRound(player, deck)
-    inpt = input("Shall we play?")
-    while not valid_continue_input(inpt):
-        print("please enter a valid input, ('Y' or 'N') ")
-        inpt = input("Shall we play?")
+
+    # Main game loop
+    # Game should look like:
+    # {name}: {hand}
+    # Which cards do u want to hold?
+    # You held {cards that held}
+    # {Hand type}!! You won {amount won}
+    # You have {money} left
+    # Would you like to continue?
+    while True:
+        print()
+        typeOfHand = PokerRound(player, deck)
+        moneywon = credits_for_hand[typeOfHand]
+        player.addMoney(moneywon)
+        if typeOfHand == "Nothing":
+            print("Nothing :( You lost.")
+        else:
+            print(typeOfHand + "!!", "You won", moneywon)
+        print("You have %d money left" % player.getMoney())
+        inpt = input("Shall we continue? ")
+        while not valid_continue_input(inpt):
+            print("please enter a valid input, ('Y' or 'N') ")
+            inpt = input("Shall we continue? ")
+        if inpt == 'N':
+            break
+    
     
     #PokerRound()
 # add any other helper functions to organize your code nicely
@@ -90,7 +117,7 @@ def PokerRound(player: PokerPlayer, deck: PokerHand) -> str:
     Output the hand type
     
     '''
-    print("{}: {}".format(player.name, player.hand))
+    print("{}:\t{}".format(player.name, player.hand))
     rawcards = player.askHoldChoice().split(' ')
     cardsToHold = [player.getCard(int(c) - 1) for c in rawcards]
     #player hand = cardstohold
@@ -107,21 +134,22 @@ def PokerRound(player: PokerPlayer, deck: PokerHand) -> str:
     return hand_type
 
 def main():
-    hand = PokerHand()
-    hand.cards = [
-        PokerCard("10", '♥'),
-        PokerCard("J", '♥'),
-        PokerCard("Q", '♥'),
-        PokerCard("K", '♥'),
-        PokerCard("A", '♥')
-    ]
-    
-    deck = PokerHand()
-    for i in ['A', '1', '2', '3', '4', '5', '6', '7','8', '9', '10', 'J', 'Q', 'K']:
-        for j in ['♥', '♦', '♣', '♠']:
-            deck.cards.append(PokerCard(i, j))
-    p = PokerPlayer("Yudachi", 100000000, hand)
-    print(PokerRound(p, hand))
+    # hand = PokerHand()
+    # hand.cards = [
+    #     PokerCard("10", '♥'),
+    #     PokerCard("J", '♥'),
+    #     PokerCard("Q", '♥'),
+    #     PokerCard("K", '♥'),
+    #     PokerCard("A", '♥')
+    # ]
+    # 
+    # deck = PokerHand()
+    # for i in ['A', '1', '2', '3', '4', '5', '6', '7','8', '9', '10', 'J', 'Q', 'K']:
+    #     for j in ['♥', '♦', '♣', '♠']:
+    #         deck.cards.append(PokerCard(i, j))
+    # p = PokerPlayer("Yudachi", 100000000, hand)
+    # print(PokerRound(p, hand))
+    PokerGame()
     
 if __name__ == "__main__":
     main()

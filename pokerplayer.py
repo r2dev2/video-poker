@@ -32,12 +32,11 @@ class PokerPlayer(Player):
             try:
                 ints = int(s)
             except ValueError:
-                print("Your numbers should be integers between 1 and 5")
+                print("Your numbers should be integers between 1 and 5 inclusive")
                 return self.askHoldChoice()
             finally:
-                if 1 <= ints <= 5:
-                    continue
-                print("Your numbers should be integers between 1 and 5")
-                return self.askHoldChoice()
+                if not 1 <= ints <= 5:
+                    print("Your numbers should be integers between 1 and 5 inclusive")
+                    return self.askHoldChoice()
         return cards_to_hold
 
