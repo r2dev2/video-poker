@@ -40,10 +40,12 @@ class PokerHand(StackOfCards):
     
     def handType(self) -> str:
         classification = "Nothing"
+
         # Sorts a copy to avoid modifying self
         clone = deepcopy(self)
         clone.sort()
-        # convert cards to str
+        
+        # convert cards to str and list of str
         listcards = [str(int(c)) for c in clone.cards]
         strcards = ''.join(listcards)
 
@@ -55,13 +57,15 @@ class PokerHand(StackOfCards):
             if [listcards[2]] * 2 == listcards[:2] and listcards[3] == listcards[4] or \
                 [listcards[2]]* 2 == listcards[3:] and listcards[0] == listcards[1]:
                 return "Full House"
+
         # Two Pairs
         if rankclassification == 2 and numPairs(strcards) == 2:
             return "Two Pairs"
+
         # Change pair to pair (Jacks or better)
         if rankclassification == 2:
-            jacksorbetter = [11, 11] in listcards or [12, 12] in listcards or \
-                [13, 13] in listcards or [14, 14] in listcards
+            jacksorbetter = is_in([11, 11], listcards) or is_in([12, 12], listcards) or \
+                is_in([13, 13], listcards) or is_in([14, 14], listcards)
             if not jacksorbetter:
                 rankclassification = 1
 

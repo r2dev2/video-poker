@@ -2,7 +2,6 @@ from typing import Generic
 
 # returns if a list is found in a bigger list
 def is_in(small: list, big: list) -> bool:
-    
     if len(small) > len(big):
         return False
     if len(small) == len(big):
@@ -27,7 +26,7 @@ def countMaxOccurences(ilst: list) -> int:
         times = i
     # Get the highest between the current max duplicity and the max duplicity of
     # everything but the first character
-    return max([times, countMaxOccurences(ilst[1:])])
+    return max(times, countMaxOccurences(ilst[1:]))
 
 # count number of pairs
 def numPairs(ilst: list) -> int:
