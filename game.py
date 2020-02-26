@@ -8,8 +8,8 @@ Description: Classes are done
 '''
 
 # Ronak Badhe, Karthik Bhattaram
-# TODO Finish snapshot 2 comment
-# Snapshot 2 comment: finished base classes, base snarf
+# IMPORTANT: won't work on python < 3.5 due to type annotations
+# Snapshot 2 comment: finished text based version
 
 from typing import Callable
 
