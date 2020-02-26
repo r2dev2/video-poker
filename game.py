@@ -8,7 +8,11 @@ Description: Classes are done
 '''
 
 # Ronak Badhe, Karthik Bhattaram
-# Snapshot comment: finished base classes, base snarf
+# TODO Finish snapshot 2 comment
+# Snapshot 2 comment: finished base classes, base snarf
+
+from typing import Callable
+
 from poker_hand import PokerHand
 from pokercard import PokerCard
 from pokerplayer import PokerPlayer
@@ -25,10 +29,14 @@ WINNING_HANDS = [ "Royal Flush", \
                   "Pair (Jacks or better)" ]
 
 # make a PokerGame function
-def valid_continue_input(inpt: str) -> bool:
-    return inpt == 'Y' or inpt == 'N'
+def willContinue() -> bool:
+    ipt = input("Shall we continue?(Y/N) ").upper()
+    if ipt in ['Y', 'N']:
+        return ipt == 'Y'
+    return willContinue()
 
-# creates a deck instance of type PokerHand
+
+# creates a deck instance of type PokerHand by iterating through suits and ranks
 def create_deck() -> PokerHand:
     deck = PokerHand()
     SUIT = ['♥', '♦', '♣', '♠']
@@ -40,8 +48,78 @@ def create_deck() -> PokerHand:
     deck.shuffle()
     return deck
 
+
+# Creates game variables
+# Returns (deck, player)
+def gameinit(name: str, money: int) -> tuple:
+    deck = create_deck()
+    # deals 5 cards to deck
+    hand = PokerHand()
+    for i in range(5):
+        hand.add(deck.deal())
+    player = PokerPlayer(name, money, hand)
+    return deck, player
+
+
+# Gets name from user
+def getNameInput() -> str:
+    name = input("What is your name? ")
+
+
+# Gets int inputs
+# Ex: intinput("An integer please ", lambda x: 1<x<5, "Integer between 1 and 5") \
+# Will keep asking until user inputs an int between 1 and 5
+def intinput(prompt: str, condition: Callable, errmsg: str = "Please enter a valid integer.") -> int:
+    # Checks if condition is callable
+    if not callable(condition):
+        raise TypeError("Condition should be a function")
+
+    cin = input(prompt)
+    # Sees if cin can be turned into an int following guidelines
+    try:
+        cin = int(cin)
+    except ValueError:
+        print(errmsg)
+        return intinput(prompt, condition, errmsg)
+    if not condition(cin):
+        print(errmsg)
+        return intinput(prompt, condition, errmsg)
+    return cin
+
+
+# Initial money with input validation
+def getMoneyInput() -> str:
+    errormsg = "Please enter an integer greater than 0"
+    prompt = "How many credits do you have? "
+    return intinput(
+        prompt,
+        lambda x: x > 0,
+        errormsg
+    )
+
+
+# Returns amount of money to be bet
+def getBetInput() -> int:
+    return intinput(
+        "How much would you like to bet? ",
+        lambda x: x > 0,
+        "Please enter an integer value greater than 0"
+    )
+
+
+# -------------------------------
 # Poker Game text solo version
+# Main game loop
+# Game should look like:
+# {name}: {hand}
+# Which cards do u want to hold?
+# You held {cards that held}
+# {Hand type}!! You won {amount won}
+# You have {money} left
+# Would you like to continue?
+# -------------------------------
 def PokerGame() -> None:
+    # Hash map for money gained per hand type
     credits_for_hand = {
         "Royal Flush" : 250,
         "Straight Flush" : 50,
@@ -54,62 +132,36 @@ def PokerGame() -> None:
         "Pair (Jacks or better)" : 1,
         "Nothing": -1
         }
-    # make the player
-    #player = PokerPlayer("Player", 1)
-    
-    # make a deck of cards
-    deck = create_deck()
-    # make rest of the game
-    #pseudocode for the game
-    #
+
+    # Intro
     print("Poker Game!! Let's Go!")
-    name = input("What is your name? ")
+    name = getNameInput()
     print("Hello %s, let's begin" % name)
-    money = int(input("How many credits do you have? "))
+    money = getMoneyInput()
     print("You have %d credits" % money)
 
-    # deal 5 cards and create player
-    hand = PokerHand()
-    for i in range(5):
-        hand.add(deck.deal())
-    player = PokerPlayer(name, money, hand)
+    # Create Game variables
+    deck, player = gameinit(name, money)
 
-    # Main game loop
-    # Game should look like:
-    # {name}: {hand}
-    # Which cards do u want to hold?
-    # You held {cards that held}
-    # {Hand type}!! You won {amount won}
-    # You have {money} left
-    # Would you like to continue?
-    while True:
+    # Main Game Loop
+    while player.getMoney() > 0:
         print()
+        bet = getBetInput()
         typeOfHand = PokerRound(player, deck)
-        moneywon = credits_for_hand[typeOfHand]
+        moneywon = bet * credits_for_hand[typeOfHand]
         player.addMoney(moneywon)
         if typeOfHand == "Nothing":
             print("Nothing :( You lost.")
         else:
             print(typeOfHand + "!!", "You won", moneywon)
         print("You have %d money left" % player.getMoney())
-        inpt = input("Shall we continue? ")
-        while not valid_continue_input(inpt):
-            print("please enter a valid input, ('Y' or 'N') ")
-            inpt = input("Shall we continue? ")
-        if inpt == 'N':
+        if not willContinue():
             break
-        player.hand = PokerHand()
-        deck = create_deck()#replaces the old (incomplete) deck with a new one for the next poker round
-        for i in range(5):
-            player.hand.add(deck.deal())
+        deck, player = gameinit(name, player.getMoney())
     
-    
-    #PokerRound()
-# add any other helper functions to organize your code nicely
     
 # plays one round of the game
 # return string of results
-# update player's money
 def PokerRound(player: PokerPlayer, deck: PokerHand) -> str:
     
     '''
@@ -121,9 +173,11 @@ def PokerRound(player: PokerPlayer, deck: PokerHand) -> str:
     Output the hand type
     
     '''
-    print("{}:\t{}".format(player.name, player.hand))
+    print("{}:\t{}".format(player.getName(), player.hand))
     rawcards = player.askHoldChoice().split(' ')
-    cardsToHold = [player.getCard(int(c) - 1) for c in rawcards]
+    cardsToHold = []
+    if rawcards != ['']:
+        cardsToHold = [player.getCard(int(c) - 1) for c in rawcards]
     #player hand = cardstohold
 
     testhand = PokerHand()
@@ -138,6 +192,7 @@ def PokerRound(player: PokerPlayer, deck: PokerHand) -> str:
     newHand.cards = cardsToHold[:]
     #make a new poker_hand
     player.hand = newHand
+    print("%s:" % player.getName(), player.hand)
     hand_type = player.hand.handType()
     return hand_type
 
