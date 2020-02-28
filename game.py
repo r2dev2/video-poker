@@ -66,8 +66,8 @@ def gameinit(name: str, money: int) -> tuple:
 
 
 # Gets name from user
-def getNameInput(cin = inputFunc) -> str:
-    name = cin("What is your name? ")
+def getNameInput() -> str:
+    name = input("What is your name? ")
     return name
 
 
