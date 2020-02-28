@@ -8,7 +8,7 @@ import telnetlib
 # Methods
 #     - login(user) = logs in to telnet connection, initializes connection
 #     - close() = closes telnet connection
-#     - receive_tell() = returns tell message if a tell was sent or else None
+#     - receive_tell() = returns tell message and sender if a tell was sent or else None
 #     - tell(receiver, msg) = sends a tell to a user
 #===========================================================================
 
@@ -19,15 +19,15 @@ class IO:
     def close(self) -> None:
         self.tel.close()
 
-    def receive_tell(self) -> str:
-        back = self.tel.read_very_eager().decode("utf-8").split("fics%")
+    def receive_tell(self) -> (str, str):
+        back = self.tel.read_eager().decode("utf-8").split("fics%")
         for s in back:
             if "(U)" in s:
-                return s[24:-2]
-        return None
+                return s[2:9], s[24:-2]
+        return None, None
 
     def tell(self, receiver: str, msg: str) -> None:
-        self.tel.write("tell {who} {msg}\r\n".format(who=receiver, msg=msg).encode()("ascii"))
+        self.tel.write("tell {who} {msg}\r\n".format(who=receiver, msg=msg).encode("ascii"))
 
     def login(self, user: str) -> None:
         self.tel.read_until(b"login: ")
