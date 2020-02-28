@@ -4,6 +4,7 @@ from threading import Thread
 from IO import IO
 from client import P1, P2, HOST
 from game import PokerGame
+from common import touch
 
 def main() -> None:
     # FICS = IO("freechess.org", 5000)
@@ -34,14 +35,14 @@ def userInput(prompt: str) -> str:
 def fileUserOutput(filename = "1.game") -> None:
     with open(filename, 'r') as fin:
         prev = fin.readlines()[:-1]
-    sleep(.2)
+    sleep(.1)
     while True:
         with open(filename, 'r') as fin:
-            new = fin.readlines()[:-1]
+            new = fin.readlines()[:]
         differences = findDifference(prev[:], new[:])
         if differences != []:
             for s in differences:
-                print(s[:-1])
+                print(s[:-1], flush = True)
         prev = new[:]
 
 def findDifference(oglines: list, newlines: list) -> list:

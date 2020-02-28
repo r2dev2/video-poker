@@ -71,5 +71,9 @@ def commonmain():
     for ispass in testCountMaxOccurences():
         print(ispass)
 
+def touch(filename: str) -> None:
+    with open(filename, 'a+') as fin:
+        pass
+
 if __name__ == "__main__":
     commonmain()
