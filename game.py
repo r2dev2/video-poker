@@ -11,7 +11,8 @@ Description: Classes are done
 # IMPORTANT: won't work on python < 3.5 due to type annotations
 # Snapshot 2 comment: finished text based version
 
-from typing import Callable
+from typing import Callable, Generic
+import sys
 
 from poker_hand import PokerHand
 from pokercard import PokerCard
@@ -28,9 +29,12 @@ WINNING_HANDS = [ "Royal Flush", \
                   "Two Pairs", \
                   "Pair (Jacks or better)" ]
 
+def inputFunc(prompt) -> str:
+    return input(prompt)
+
 # make a PokerGame function
-def willContinue() -> bool:
-    ipt = input("Shall we continue?(Y/N) ").upper()
+def willContinue(cin = inputFunc) -> bool:
+    ipt = cin("Shall we continue?(Y/N) ").upper()
     if ipt in ['Y', 'N']:
         return ipt == 'Y'
     return willContinue()
@@ -62,20 +66,20 @@ def gameinit(name: str, money: int) -> tuple:
 
 
 # Gets name from user
-def getNameInput() -> str:
-    name = input("What is your name? ")
+def getNameInput(cin = inputFunc) -> str:
+    name = cin("What is your name? ")
     return name
 
 
 # Gets int inputs
 # Ex: intinput("An integer please ", lambda x: 1<x<5, "Integer between 1 and 5") \
 # Will keep asking until user inputs an int between 1 and 5
-def intinput(prompt: str, condition: Callable, errmsg: str = "Please enter a valid integer.") -> int:
+def intinput(prompt: str, condition: Callable, errmsg: str = "Please enter a valid integer.", cinput = inputFunc) -> int:
     # Checks if condition is callable
     if not callable(condition):
         raise TypeError("Condition should be a function")
 
-    cin = input(prompt)
+    cin = cinput(prompt)
     # Sees if cin can be turned into an int following guidelines
     try:
         cin = int(cin)
@@ -89,22 +93,24 @@ def intinput(prompt: str, condition: Callable, errmsg: str = "Please enter a val
 
 
 # Initial money with input validation
-def getMoneyInput() -> str:
+def getMoneyInput(cin = input) -> str:
     errormsg = "Please enter an integer greater than 0"
     prompt = "How many credits do you have? "
     return intinput(
         prompt,
         lambda x: x > 0,
-        errormsg
+        errormsg,
+        cin
     )
 
 
 # Returns amount of money to be bet
-def getBetInput() -> int:
+def getBetInput(cin = input) -> int:
     return intinput(
         "How much would you like to bet? ",
         lambda x: x > 0,
-        "Please enter an integer value greater than 0"
+        "Please enter an integer value greater than 0",
+        cin
     )
 
 
@@ -119,7 +125,7 @@ def getBetInput() -> int:
 # You have {money} left
 # Would you like to continue?
 # -------------------------------
-def PokerGame() -> None:
+def PokerGame(cout: Generic = sys.stdout, cin = input) -> None:
     # Hash map for money gained per hand type
     credits_for_hand = {
         "Royal Flush" : 250,
@@ -135,35 +141,35 @@ def PokerGame() -> None:
         }
 
     # Intro
-    print("Poker Game!! Let's Go!")
-    name = getNameInput()
-    print("Hello %s, let's begin" % name)
-    money = getMoneyInput()
-    print("You have %d credits" % money)
+    print("Poker Game!! Let's Go!", file = cout, flush = True)
+    name = getNameInput(cin)
+    print("Hello %s, let's begin" % name, file = cout, flush = True)
+    money = getMoneyInput(cin)
+    print("You have %d credits" % money, file = cout, flush = True)
 
     # Create Game variables
     deck, player = gameinit(name, money)
 
     # Main Game Loop
     while player.getMoney() > 0:
-        print()
-        bet = getBetInput()
-        typeOfHand = PokerRound(player, deck)
+        print(file = cout)
+        bet = getBetInput(cin)
+        typeOfHand = PokerRound(player, deck, cout)
         moneywon = bet * credits_for_hand[typeOfHand]
         player.addMoney(moneywon)
         if typeOfHand == "Nothing":
-            print("Nothing :( You lost.")
+            print("Nothing :( You lost.", file = cout, flush = True)
         else:
-            print(typeOfHand + "!!", "You won", moneywon)
-        print("You have %d money left" % player.getMoney())
-        if not willContinue():
+            print(typeOfHand + "!!", "You won", moneywon, file = cout, flush = True)
+        print("You have %d money left" % player.getMoney(), file = cout, flush = True)
+        if not willContinue(cin):
             break
         deck, player = gameinit(name, player.getMoney())
     
     
 # plays one round of the game
 # return string of results
-def PokerRound(player: PokerPlayer, deck: PokerHand) -> str:
+def PokerRound(player: PokerPlayer, deck: PokerHand, cout: Generic = sys.stdout, cin = input, lag = 0) -> str:
     
     '''
     explanation of program logic
@@ -174,7 +180,7 @@ def PokerRound(player: PokerPlayer, deck: PokerHand) -> str:
     Output the hand type
     
     '''
-    print("{}:\t{}".format(player.getName(), player.hand))
+    print("{}:\t{}".format(player.getName(), player.hand), file = cout, flush = True)
     rawcards = player.askHoldChoice().split(' ')
     cardsToHold = []
     if rawcards != ['']:
@@ -183,7 +189,7 @@ def PokerRound(player: PokerPlayer, deck: PokerHand) -> str:
 
     testhand = PokerHand()
     testhand.cards = cardsToHold
-    print("You held:", testhand)
+    print("You held:", testhand, file = cout, flush = True)
 
     #now add additional cards
     while len(cardsToHold) < 5:
@@ -193,7 +199,7 @@ def PokerRound(player: PokerPlayer, deck: PokerHand) -> str:
     newHand.cards = cardsToHold[:]
     #make a new poker_hand
     player.hand = newHand
-    print("%s:" % player.getName(), player.hand)
+    print("%s:" % player.getName(), player.hand, file = cout, flush = True)
     hand_type = player.hand.handType()
     return hand_type
 

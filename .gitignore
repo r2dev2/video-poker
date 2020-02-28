@@ -1,5 +1,7 @@
 # Personal
 Instructions.pdf
+lock.lock
+*.game
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

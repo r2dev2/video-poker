@@ -21,8 +21,8 @@ from poker_hand import PokerHand
 #===========================================================================
 
 class PokerPlayer(Player):
-    def askHoldChoice(self) -> str:
-        cards_to_hold = input("Which cards would you like to hold?\n")
+    def askHoldChoice(self, cin = input) -> str:
+        cards_to_hold = cin("Which cards would you like to hold?\n")
         if len(cards_to_hold) == 0:
             return ''
         holdlist = cards_to_hold.split(' ')

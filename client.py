@@ -1,3 +1,4 @@
+import os
 from threading import Thread
 from time import sleep
 
@@ -5,9 +6,9 @@ from IO import IO
 from game import intinput
 
 # Name constants
-P1 = "guestKA"
-P2 = "guestKB"
-HOST = "guestKS"
+P1 = "geustKA"
+P2 = "geustKB"
+HOST = "geustKS"
 
 def main() -> None:
     username, other = getUser()
@@ -19,25 +20,38 @@ def main() -> None:
     receive.start()
     send.join()
     receive.join()
+    resetLock()
     print("Ended")
 
+# Returns if the lock file is found
 def shouldExit(filename = "lock.lock") -> bool:
-    return False
+    try:
+        with open(filename, 'r') as fin:
+            pass
+    except FileNotFoundError:
+        return False
+    return True
 
+# Gives Signal to all threads to stop
 def stopAllThreads(filename = "lock.lock") -> None:
-    pass
+    with open(filename, 'w+') as fout:
+        fout.write("yeet the threads")
+
+# Deletes the lock file
+def resetLock(filename = "lock.lock") -> None:
+    os.remove(filename)
 
 def printOutput(msg: str) -> None:
     print(msg)
 
 def client_receive(server: IO) -> None:
-    print("Receiving tells")
     server.receive_tell()
     while not shouldExit():
         name, msg = server.receive_tell()
         if msg is None:
             sleep(.1)
             continue
+        # Don't read messages from each individual guest
         if "KA(U)" in msg or "KB(U)" in msg or '*' in msg:
             continue
         printOutput(msg)
