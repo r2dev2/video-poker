@@ -1,3 +1,5 @@
+import sys
+
 from player import Player
 from poker_hand import PokerHand
 
@@ -21,25 +23,25 @@ from poker_hand import PokerHand
 #===========================================================================
 
 class PokerPlayer(Player):
-    def askHoldChoice(self, cin = input) -> str:
+    def askHoldChoice(self, cin = input, cout = sys.stdout) -> str:
         cards_to_hold = cin("Which cards would you like to hold?\n")
         if len(cards_to_hold) == 0:
             return ''
         holdlist = cards_to_hold.split(' ')
         # If there are more than 5 cards, try again (input validation)
         if len(holdlist) > 5:
-            print("You should have 5 entries at max")
-            return self.askHoldChoice()
+            print("You should have 5 entries at max", file = sys.stdout)
+            return self.askHoldChoice(cin, cout)
         # Input Validation by splitting by ' ' and checking if each value is an integer between 1 and 5
         for s in holdlist:
             try:
                 ints = int(s)
             except ValueError:
-                print("Your numbers should be integers between 1 and 5 inclusive")
-                return self.askHoldChoice()
+                print("Your numbers should be integers between 1 and 5 inclusive", file = cout)
+                return self.askHoldChoice(cin, cout)
             if not 1 <= ints <= 5:
-                print("Your numbers should be integers between 1 and 5 inclusive")
-                return self.askHoldChoice()
+                print("Your numbers should be integers between 1 and 5 inclusive", file = cout)
+                return self.askHoldChoice(cin, cout)
         return cards_to_hold
 
 

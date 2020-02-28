@@ -74,7 +74,13 @@ def getNameInput(cin = inputFunc) -> str:
 # Gets int inputs
 # Ex: intinput("An integer please ", lambda x: 1<x<5, "Integer between 1 and 5") \
 # Will keep asking until user inputs an int between 1 and 5
-def intinput(prompt: str, condition: Callable, errmsg: str = "Please enter a valid integer.", cinput = inputFunc) -> int:
+def intinput(
+    prompt: str, 
+    condition: Callable, 
+    errmsg: str = "Please enter a valid integer.", 
+    cinput = inputFunc, 
+    cout = sys.stdout
+) -> int:
     # Checks if condition is callable
     if not callable(condition):
         raise TypeError("Condition should be a function")
@@ -84,33 +90,35 @@ def intinput(prompt: str, condition: Callable, errmsg: str = "Please enter a val
     try:
         cin = int(cin)
     except ValueError:
-        print(errmsg)
+        print(errmsg, file = cout, flush = True)
         return intinput(prompt, condition, errmsg)
     if not condition(cin):
-        print(errmsg)
+        print(errmsg, file = cout, flush = True)
         return intinput(prompt, condition, errmsg)
     return cin
 
 
 # Initial money with input validation
-def getMoneyInput(cin = input) -> str:
+def getMoneyInput(cin = input, cout = sys.stdout) -> str:
     errormsg = "Please enter an integer greater than 0"
     prompt = "How many credits do you have? "
     return intinput(
         prompt,
         lambda x: x > 0,
         errormsg,
-        cin
+        cin,
+        cout
     )
 
 
 # Returns amount of money to be bet
-def getBetInput(cin = input) -> int:
+def getBetInput(cin = input, cout = sys.stdout) -> int:
     return intinput(
         "How much would you like to bet? ",
         lambda x: x > 0,
         "Please enter an integer value greater than 0",
-        cin
+        cin,
+        cout
     )
 
 
@@ -142,9 +150,9 @@ def PokerGame(cout: Generic = sys.stdout, cin = input) -> None:
 
     # Intro
     print("Poker Game!! Let's Go!", file = cout, flush = True)
-    name = getNameInput(cin)
+    name = getNameInput(cin, cout)
     print("Hello %s, let's begin" % name, file = cout, flush = True)
-    money = getMoneyInput(cin)
+    money = getMoneyInput(cin, cout)
     print("You have %d credits" % money, file = cout, flush = True)
 
     # Create Game variables
@@ -154,7 +162,7 @@ def PokerGame(cout: Generic = sys.stdout, cin = input) -> None:
     while player.getMoney() > 0:
         print(file = cout)
         bet = getBetInput(cin)
-        typeOfHand = PokerRound(player, deck, cout)
+        typeOfHand = PokerRound(player, deck, cout, cin)
         moneywon = bet * credits_for_hand[typeOfHand]
         player.addMoney(moneywon)
         if typeOfHand == "Nothing":
@@ -169,7 +177,7 @@ def PokerGame(cout: Generic = sys.stdout, cin = input) -> None:
     
 # plays one round of the game
 # return string of results
-def PokerRound(player: PokerPlayer, deck: PokerHand, cout: Generic = sys.stdout, cin = input, lag = 0) -> str:
+def PokerRound(player: PokerPlayer, deck: PokerHand, cout = sys.stdout, cin = input) -> str:
     
     '''
     explanation of program logic
@@ -181,7 +189,7 @@ def PokerRound(player: PokerPlayer, deck: PokerHand, cout: Generic = sys.stdout,
     
     '''
     print("{}:\t{}".format(player.getName(), player.hand), file = cout, flush = True)
-    rawcards = player.askHoldChoice().split(' ')
+    rawcards = player.askHoldChoice(cin, cout).split(' ')
     cardsToHold = []
     if rawcards != ['']:
         cardsToHold = [player.getCard(int(c) - 1) for c in rawcards]
