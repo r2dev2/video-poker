@@ -4,6 +4,7 @@ from time import sleep
 
 from IO import IO
 from game import intinput
+from common import ascii_to_unicode
 
 # Name constants
 P1 = "geustKA"
@@ -54,6 +55,8 @@ def client_receive(server: IO) -> None:
         # Don't read messages from each individual guest
         if "KA(U)" in msg or "KB(U)" in msg or '*' in msg:
             continue
+        for k, v in ascii_to_unicode.items():
+            msg = msg.replace(k, v)
         printOutput(msg)
 
 def client_send(server: IO, other: str):

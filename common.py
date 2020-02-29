@@ -1,4 +1,14 @@
 from typing import Generic
+import os
+
+unicode_to_ascii = {
+    '♥': "$HEART", 
+    '♦': "$DIAMOND", 
+    '♣': "$CLUB", 
+    '♠': "$SPADE"
+}
+
+ascii_to_unicode = {v: k for k, v in unicode_to_ascii.items()}
 
 # returns if a list is found in a bigger list
 def is_in(small: list, big: list) -> bool:
@@ -71,9 +81,15 @@ def commonmain():
     for ispass in testCountMaxOccurences():
         print(ispass)
 
-def touch(filename: str) -> None:
-    with open(filename, 'a+') as fin:
+# Removes a file and does equivalent of ``touch filename``
+def rmtouch(filename: str) -> None:
+    try:
+        os.remove(filename)
+    except FileNotFoundError:
         pass
+    finally:
+        with open(filename, 'a+') as fin:
+            pass
 
 if __name__ == "__main__":
     commonmain()
