@@ -78,7 +78,10 @@ def client_send(server: IO, other: str):
             stopAllThreads()
             continue
         print()
-        server.tell(other, msg)
+        try:
+            server.tell(other, msg)
+        except UnicodeEncodeError:
+            print("Enter a unicode please")
 
 def getUser() -> (str, str):
     ipt = intinput(
