@@ -4,7 +4,7 @@ from time import sleep
 
 from IO import IO
 from game import intinput
-from common import ascii_to_unicode
+from translation import fics_to_python
 
 # Name constants
 P1 = "geustKA"
@@ -46,18 +46,29 @@ def printOutput(msg: str) -> None:
     print(msg)
 
 def client_receive(server: IO) -> None:
+    outputlog = open("client.log", 'a+')
+    receiving = False
     server.receive_tell()
     while not shouldExit():
         name, msg = server.receive_tell()
         if msg is None:
             sleep(.1)
             continue
+        # Weird f/fi from fics%
+        if msg[:3] == '\n\nf':
+            continue
+        # Name fix
+        if "$NA" in msg and not receiving:
+            receiving = True
+            continue
         # Don't read messages from each individual guest
         if "KA(U)" in msg or "KB(U)" in msg or '*' in msg:
             continue
-        for k, v in ascii_to_unicode.items():
+        for k, v in fics_to_python.items():
             msg = msg.replace(k, v)
-        printOutput(msg)
+        msg = msg.replace('fi', '')
+        if msg != '': printOutput(msg)
+        print(msg, file = outputlog, flush = True)
 
 def client_send(server: IO, other: str):
     print("Sending has started")

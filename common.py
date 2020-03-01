@@ -1,15 +1,6 @@
 from typing import Generic
 import os
 
-unicode_to_ascii = {
-    '♥': "$HEART", 
-    '♦': "$DIAMOND", 
-    '♣': "$CLUB", 
-    '♠': "$SPADE"
-}
-
-ascii_to_unicode = {v: k for k, v in unicode_to_ascii.items()}
-
 # returns if a list is found in a bigger list
 def is_in(small: list, big: list) -> bool:
     if len(small) > len(big):

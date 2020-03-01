@@ -2,6 +2,13 @@ not able to give hand based on rank eg 4 of kind
 
 the problem likely lies in max occurence(in common.py)
 
-There seems to be a lag in host.py when asking for user input
+Bug: There seems to be a lag in host.py when asking for user input
 It only prints output after the next input dialog has been completed
 issue lies in host.py most likely
+Fix: was reading the second last entry from file
+
+Bug: getName() seems to fail on first try but works on second try
+Possible Fix: call it first so it can work later <- Success
+
+Bug: limit on characters transferred
+Fix: added translation hash map

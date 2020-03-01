@@ -1,15 +1,20 @@
 from time import sleep
 from threading import Thread
+import sys
 
 from IO import IO
 from client import P1, P2, HOST
-from game import PokerGame
-from common import rmtouch, unicode_to_ascii
+from game import PokerGame, getNameInput
+from common import rmtouch
+from translation import python_to_fics
+
+VERBOSE = len(sys.argv) == 2 and sys.argv[1] == "--verbose"
 
 def main() -> None:
     FICS = IO("freechess.org", 5000)
     FICS.login(HOST)
     FICS.receive_tell()
+    nameFix(FICS)
     print("Host server has started up")
     # while True:
     #     name, msg = FICS.receive_tell()
@@ -19,36 +24,48 @@ def main() -> None:
     #     FICS.tell(other_user(name), msg)
     game(P1, FICS)
 
+def nameFix(server: IO) -> None:
+    userInput("What is your name? ", server, P1)
+
 def game(user: str, server: IO) -> None:
     rmtouch("1.game")
     f = open("1.game", "a+")
     out = Thread(target = fileUserOutput, args = (server, "1.game", user))
     main = Thread(target = PokerGame, args = (f, lambda p: userInput(p, server, user)))
+    out.daemon = True
+    main.daemon = True
     out.start()
     main.start()
-    main.join()
-    main = Thread(target=PokerGame, args = (f, lambda p: userInput(p, server, user)))
-    main.start()
-    main.join()
-    out.join()
-    print("Game has finished")
-    
+    if VERBOSE: print("Use keyboard interrupt to exit")
+    while True:
+        try:
+            gameIsOver([main])
+        except KeyboardInterrupt:
+            print("\nCaught signal, exiting")
+            exit()
+
+def gameIsOver(gameThread: list):
+    gameThread[0].join()
+    print("Game is over")
+    exit()
 
 def userInput(prompt: str, server: IO, user: str) -> str:
     if prompt[-1] == '\n':
         prompt = prompt[:-1]
+    if prompt[:3] == "fi\n":
+        prompt = prompt[3:]
     sleep(.3)
-    server.tell(user, prompt)
+    server.tell(user, encodeStr(prompt))
     while True:
         name, msg = server.receive_tell()
         if msg is None:
             sleep(.1)
             continue
-        return msg
+        return msg.upper()
 
 def fileUserOutput(server: IO, filename = "1.game", recepient = P1) -> None:
     server.tell(recepient, "Poker Game!! Let's Go!")
-    print("Poker Game!! Let's Go!")
+    if VERBOSE: print("Poker Game!! Let's Go!")
     with open(filename, 'r') as fin:
         prev = fin.readlines()[:-1]
     while True:
@@ -59,13 +76,17 @@ def fileUserOutput(server: IO, filename = "1.game", recepient = P1) -> None:
             for s in differences:
                 if "Let's Go!" in s:
                     continue
-                print(s[:-1], flush = True)
+                if VERBOSE: print(s[:-1], flush = True)
                 safestring = s[:-1]
-                for k, v in unicode_to_ascii.items():
-                    safestring = safestring.replace(k, v)
-                print("Safestring=", safestring)
+                safestring = encodeStr(safestring)
+                if VERBOSE: print("Safestring=", safestring)
                 server.tell(recepient, safestring)
         prev = new[:]
+
+def encodeStr(msg: str) -> str:
+    for k, v in python_to_fics.items():
+        msg = msg.replace(k, v)
+    return msg
 
 def findDifference(oglines: list, newlines: list) -> list:
     if len(oglines) >= len(newlines):
