@@ -10,6 +10,7 @@ import telnetlib
 #     - close() = closes telnet connection
 #     - receive_tell() = returns tell message and sender if a tell was sent or else None
 #     - tell(receiver, msg) = sends a tell to a user
+#     - write(cmd) = sends a command to telnet server
 #===========================================================================
 
 class IO:
@@ -28,6 +29,9 @@ class IO:
 
     def tell(self, receiver: str, msg: str) -> None:
         self.tel.write("tell {who} {msg}\r\n".format(who=receiver, msg=msg).encode("ascii"))
+
+    def write(self, cmd: str) -> None:
+        self.tel.write("{msg}\r\n".format(msg=cmd).encode("ascii"))
 
     def login(self, user: str) -> None:
         self.tel.read_until(b"login: ")

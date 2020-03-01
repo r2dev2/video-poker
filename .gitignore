@@ -2,6 +2,7 @@
 Instructions.pdf
 lock.lock
 *.game
+*.in
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

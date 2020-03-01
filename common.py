@@ -1,4 +1,24 @@
 from typing import Generic
+import os
+from string import digits
+
+# Returns indexes of all occurences within a list
+def find_all(value: Generic, biglist: list) -> list:
+    indexes = []
+    for i, v in enumerate(biglist):
+        if v == value:
+            indexes.append(i)
+    return indexes
+
+# Returns the integer value of the number inside a string
+# Ex: numInStr("hello123hello123") -> 123123
+def numInStr(string: str) -> int:
+    def strnumInStr(string: str) -> str:
+        if len(string) == 0:
+            return ''
+        n = str(string[0]) if string[0] in digits else ''
+        return n + strnumInStr(string[1:])
+    return int(strnumInStr(string)) if string != '' else 0
 
 # returns if a list is found in a bigger list
 def is_in(small: list, big: list) -> bool:
@@ -70,6 +90,16 @@ def testCountMaxOccurences() -> Generic:
 def commonmain():
     for ispass in testCountMaxOccurences():
         print(ispass)
+
+# Removes a file and does equivalent of ``touch filename``
+def rmtouch(filename: str) -> None:
+    try:
+        os.remove(filename)
+    except FileNotFoundError:
+        pass
+    finally:
+        with open(filename, 'a+') as fin:
+            pass
 
 if __name__ == "__main__":
     commonmain()

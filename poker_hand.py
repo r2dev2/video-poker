@@ -35,6 +35,9 @@ WINNING_HANDS = [ "Royal Flush",
 #===========================================================================
 
 class PokerHand(StackOfCards):
+    def __str__(self):
+        return super().__str__() + ' '
+        
     def sort(self) -> None:
         self.cards.sort()
     

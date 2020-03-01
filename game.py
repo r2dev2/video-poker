@@ -67,7 +67,7 @@ def gameinit(name: str, money: int) -> tuple:
 
 # Gets name from user
 def getNameInput(cin = input, cout = sys.stdout) -> str:
-    name = input("What is your name? ")
+    name = cin("What is your name? ")
     return name
 
 
@@ -91,10 +91,10 @@ def intinput(
         cin = int(cin)
     except ValueError:
         print(errmsg, file = cout, flush = True)
-        return intinput(prompt, condition, errmsg)
+        return intinput(prompt, condition, errmsg, cinput, cout)
     if not condition(cin):
         print(errmsg, file = cout, flush = True)
-        return intinput(prompt, condition, errmsg)
+        return intinput(prompt, condition, errmsg, cinput, cout)
     return cin
 
 
