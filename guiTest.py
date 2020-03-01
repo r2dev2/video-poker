@@ -31,9 +31,12 @@ for i in range(5):
     hold_curr_card = ynbox("Do you want to hold card" + str(i))
     arr[i] = hold_curr_card
 
-
-
 hold_cards = enterbox()
+
+image = "python_and_check_logo.gif"
+msg   = "Do you like this picture?"
+choices = ["Yes","No","No opinion"]
+reply=buttonbox(msg,image=image,choices=choices)
 
 '''
 # A nice welcome message
