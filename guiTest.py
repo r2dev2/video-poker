@@ -1,4 +1,5 @@
-import sys
+import os
+from pathlib import Path
 import subprocess
 
 # Just because you might not have it installed
@@ -33,10 +34,10 @@ for i in range(5):
 
 hold_cards = enterbox()
 
-image = "python_and_check_logo.gif"
+image = Path(os.getcwd()) / "img" / "python_and_check_logo.gif"
 msg   = "Do you like this picture?"
 choices = ["Yes","No","No opinion"]
-reply=buttonbox(msg,image=image,choices=choices)
+reply=buttonbox(msg,image=str(image),choices=choices)
 
 '''
 # A nice welcome message
