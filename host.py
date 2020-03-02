@@ -38,7 +38,7 @@ def main() -> None:
 
 def nameFix(server: IO) -> None:
     server.tell(P1, encodeStr("What is your name? "))
-    # server.tell(P2, encodeStr("What is your name? "))
+    server.tell(P2, encodeStr("What is your name? "))
     server.receive_tell()
 
 def game(user: str, gamefile: str, server: IO) -> Thread:
@@ -87,6 +87,7 @@ def userInput(prompt: str, server: IO, user: str, filename: str) -> str:
     with open(filename, 'r') as fin:
         prev = fin.readlines()[:]
     while True:
+        sleep(.1)
         with open(filename, 'r') as fin:
             new = fin.readlines()[:]
         differences = findDifference(prev[:], new[:])
