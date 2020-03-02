@@ -48,8 +48,9 @@ class Card:
     def __str__(self):
         return('{}{}'.format(self.rank, self.suit)) 
 
-def main():
-    print(int(Card('A', '♥')))
+'''def main():
+    print(int(Card('A', '♥')))''' 
 
-if __name__ == "__main__":
+'''if __name__ == "__main__":
     main()
+'''

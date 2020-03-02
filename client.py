@@ -68,7 +68,8 @@ def client_receive(server: IO) -> None:
             msg = msg.replace(k, v)
         msg = msg.replace('fi', '')
         if msg != '': printOutput(msg)
-        print(msg, file = outputlog, flush = True)
+        # print("Yeetus the deletus", flush=True)
+        # print(msg, file = outputlog, flush = True)
 
 def client_send(server: IO, other: str):
     print("Sending has started")
