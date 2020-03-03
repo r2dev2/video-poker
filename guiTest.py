@@ -40,7 +40,7 @@ img2 = Path(os.getcwd()) / "img" / "2C.gif"
 msg   = "Do you like this picture?"
 choices = ["Yes","No","No opinion"]
 reply=buttonbox(msg,image=str(image),choices=choices)
-reply2=buttonbox(msg,image=str(image),choices=choices)
+reply2=buttonbox(msg,image=str(img2),choices=choices)
 '''
 # A nice welcome message
 ret_val = msgbox("Hello, World!")
