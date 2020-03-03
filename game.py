@@ -8,8 +8,9 @@ Description: Classes are done
 '''
 
 # Ronak Badhe, Karthik Bhattaram
-# IMPORTANT: won't work on python < 3.5 due to type annotations
-# Snapshot 2 comment: finished text based version
+# IMPORTANT: won't work on python < 3.5 due to type annotations and Pathlib
+# IMPORTANT: GUI will install easygui module with pip if not installed
+# Snapshot 3 comment: finished online multiplayer and added images
 
 from typing import Callable, Generic
 import sys
