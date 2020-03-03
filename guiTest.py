@@ -8,7 +8,7 @@ from threading import Thread
 try:
     from easygui import *
 except ImportError:
-    subprocess.call([sys.executable, '-m', "pip", "install", "easygui"],)
+    subprocess.call([sys.executable, '-m', "pip", "install", "easygui"])
 
 
 from game import PokerGame
@@ -105,19 +105,37 @@ def handToFilePaths(hand: str) -> tuple:
         new.append(news)
     return tuple(str(img / "{}.gif".format(s)) for s in new)
 
-filetuple = handToFilePaths("10♠ J♣ J♠ K♣ A♣ ")
-filelist = list(filetuple)
+# Prompt which cards to hold in hand
+def hand_prompt(hand: str) -> str:
+    filetuple = handToFilePaths(hand)
+    filelist = list(filetuple)
+    uin = []
+    reply = None
+    while True:
+        reply = buttonbox(
+            msg = "You are holding cards: %s" % ' '.join(uin),
+            image = filetuple, 
+            choices = ["I'm done"]
+            )
+        if reply == "I'm done":
+            break
+        choice = str(filelist.index(reply) + 1)
+        if choice not in uin: 
+            uin.append(choice)
+        else:
+            uin.pop(uin.index(choice))
+    uinstr = ' '.join(uin)
+    if VERBOSE: print(uinstr)
+    return uinstr
 
-# how the hand prompt will work
-uin = []
-reply = None
-while True:
-    reply = buttonbox(image = filetuple, choices = ["I'm done"])
-    if reply == "I'm done":
-        break
-    uin.append(str(filelist.index(reply) + 1))
-uinstr = ' '.join(uin)
-print(uinstr)
+# outputs a message, keyboard interrupts if no desire to continue
+def genericOutput(msg: str) -> None:
+    tocontinue = ccbox(msg=msg, title="Video Poker")
+    if not tocontinue:
+        raise KeyboardInterrupt("Yeetus the threads")
+
+hand_prompt("7♣ 7♠ 5♠ 9♦ J♦ ")
+genericOutput("Kartrhritis")
 
 '''
 # A nice welcome message
