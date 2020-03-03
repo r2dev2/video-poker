@@ -22,6 +22,7 @@ from pathlib import Path
 import subprocess
 import sys
 from threading import Thread
+from time import sleep
 # Just because you might not have it installed
 
 try:
@@ -32,21 +33,44 @@ except ImportError:
 
 from game import PokerGame
 from common import rmtouch
+from host import findDifference
 
 FILEOUT = "gui.out"
 VERBOSE = True if len(sys.argv) == 2 and sys.argv[1] == "--verbose" else False
+TIMEFORINPUT = False
 
 # Based on prompt change the gui
 def userInput(prompt):
+    while not TIMEFORINPUT:
+        sleep(.1)
     if "name?" in prompt:
         return getStr(prompt)
     elif "credits?" in prompt or "bet?" in prompt:
         return getInt(prompt)
-
+    elif "continue" in prompt:
+        return ccbox(title="Video Poker")
+    else:
+        raise RuntimeError("prompt not found")
 
 # Based on output change the gui
 def retrieveOutput():
-    pass
+    with open(FILEOUT, 'r') as fin:
+        prev = fin.readlines()
+    while True:
+        sleep(.1)
+        with open(FILEOUT, 'r') as fin:
+            new = fin.readlines()
+        diff = findDifference(prev[:], new[:])
+        if diff != []:
+            for s in diff:
+                if any([c in s for c in ('♠', '♥', '♦', '♣')]):
+                    n = True
+                    while n:
+                        p = fin.readlines()[-1]
+                        if "won" in p or "lost" in p:
+                            show_hand(s + p[:-1])
+                            n = False
+                    
 
 def getInt(msg: str) -> int:
     return integerbox(msg=msg, title="Video Poker")
@@ -74,7 +98,10 @@ def handToFilePaths(hand: str) -> tuple:
     return tuple(str(img / "{}.gif".format(s)) for s in new)
 
 # Displays the cards
-def show_hand(hand: str):
+# msg consists of {name}: {hand}\n{result}
+def show_hand(msg: str):
+    filetuple = handToFilePaths(hand)
+    filelist = list(filetuple)
     pass
 
 # Prompt which cards to hold in hand
