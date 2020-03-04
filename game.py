@@ -164,7 +164,7 @@ def PokerGame(cout: Generic = sys.stdout, cin = input, safemode = False) -> None
     while player.getMoney() > 0:
         print(file = cout)
         bet = getBetInput(cin)
-        typeOfHand = PokerRound(player, deck, cout, cin)
+        typeOfHand = PokerRound(player, deck, cout, cin, safemode)
         moneywon = bet * credits_for_hand[typeOfHand]
         player.addMoney(moneywon)
         if typeOfHand == "Nothing":

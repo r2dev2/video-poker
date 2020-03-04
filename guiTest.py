@@ -80,7 +80,7 @@ def retrieveOutput():
                 if "You held" in s:
                     continue
                 # Checks if hand stuff is needed at all
-                elif any([c in s for c in ('♠', '♥', '♦', '♣')]):
+                elif any([c in s for c in ('♠', '♥', '♦', '♣', '@', '#', '&', '%')]):
                     if not askheld:
                         hand = s.split('\t')[1]
                         continue
@@ -115,39 +115,41 @@ def handToFilePaths(hand: str) -> tuple:
         '♦': 'D', 
         '♣': 'C',
         '♠': 'S',
-        '@': 'H',
-        '#': 'D',
-        '&': 'C',
-        '%': 'S'
+        '@': 'H ',
+        '#': 'D ',
+        '&': 'C ',
+        '%': 'S '
         }
+    for k, v in translations.items():
+        hand = hand.replace(k, v)
     new = []
     for s in hand.split(' '):
         if s.strip() == '':
             continue
-        news = s
-        for k, v in translations.items():
-            news = news.replace(k, v)
-        if VERBOSE: print(news)
-        new.append(news)
+        new.append(s)
     return tuple(getRealPaths([str(img / "{}.gif".format(s)) for s in new]))
 
 def getRealPaths(paths: list) -> list:
+    if len(paths) <= 1:
+        return paths if doesItExist(paths[0]) else [] 
+    val = paths[0] if doesItExist(paths[0]) else []
+    return [val] + getRealPaths(paths[1:])
+
+def doesItExist(path):
     try:
-        open(paths[0], 'rb').close()
-        p = [paths[0]]
+        open(path, 'rb').close()
+        exists = True
     except FileNotFoundError:
-        p = []
+        exists = False
     finally:
-        if len(paths) == 1:
-            return p
-        return p + getRealPaths(paths[1:])
+        return exists
 
 # Displays the cards
 # msg consists of {name}: {hand}\n{result}
 #=> for Karthik
 def show_hand(msg: str):
     hand = msg[:msg.find('\n')]
-    filetuple = handToFilePaths(hand)
+    filetuple = handToFilePaths(hand)[1:]
     filelist = list(filetuple)
     try:
         indexbox(msg=msg[msg.find('\n')+1:], 
