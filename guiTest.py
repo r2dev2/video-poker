@@ -18,11 +18,16 @@
 
 
 import os
-from pathlib import Path
 import subprocess
 import sys
+from pathlib import Path
 from threading import Thread
 from time import sleep
+
+from common import numInStr, rmtouch
+from game import PokerGame
+from host import findDifference
+
 # Just because you might not have it installed
 
 try:
@@ -31,24 +36,22 @@ except ImportError:
     subprocess.call([sys.executable, '-m', "pip", "install", "easygui"])
 
 
-from game import PokerGame
-from common import rmtouch
-from host import findDifference
 
 FILEOUT = "gui.out"
 VERBOSE = True if len(sys.argv) == 2 and sys.argv[1] == "--verbose" else False
-TIMEFORINPUT = False
+timeforinput = False
+money = 0
 
 # Based on prompt change the gui
 def userInput(prompt):
-    while not TIMEFORINPUT:
+    while not timeforinput:
         sleep(.1)
     if "name?" in prompt:
         return getStr(prompt)
     elif "credits?" in prompt or "bet?" in prompt:
         return getInt(prompt)
     elif "continue" in prompt:
-        return ccbox(title="Video Poker")
+        return ccbox(title="Video Poker", msg="You have %d money" % money)
     else:
         raise RuntimeError("prompt not found")
 
@@ -66,11 +69,16 @@ def retrieveOutput():
                 if any([c in s for c in ('♠', '♥', '♦', '♣')]):
                     n = True
                     while n:
-                        p = fin.readlines()[-1]
-                        if "won" in p or "lost" in p:
-                            show_hand(s + p[:-1])
-                            n = False
-                    
+                        new = fin.readlines()
+                        if "won" in new[-1] or "lost" in new[-1]:
+                            show_hand(s + new[:-1])
+                            n = False 
+                elif "money left" in s:
+                    money = numInStr(s)
+                    timeforinput = True
+                else:
+                    indexbox(title="Video Poker", msg=s, choices=("Next",))
+        prev = new[:]
 
 def getInt(msg: str) -> int:
     return integerbox(msg=msg, title="Video Poker")
@@ -99,9 +107,12 @@ def handToFilePaths(hand: str) -> tuple:
 
 # Displays the cards
 # msg consists of {name}: {hand}\n{result}
+#=> for Karthik
 def show_hand(msg: str):
+    hand = msg
     filetuple = handToFilePaths(hand)
     filelist = list(filetuple)
+    print(filelist)
     pass
 
 # Prompt which cards to hold in hand
@@ -133,9 +144,22 @@ def genericOutput(msg: str) -> None:
     if not tocontinue:
         raise KeyboardInterrupt("Yeetus the threads")
 
-def main():
+def testing():
     hand_prompt("7♣ 7♠ 5♠ 9♦ J♦ ")
     genericOutput("Kartrhritis")
 
+def main():
+    # PokerGame(cout, cin)
+    rmtouch(FILEOUT)
+    userOut = Thread(target=retrieveOutput, daemon=True)
+    mainGame = Thread(target=PokerGame, args=(open(FILEOUT, 'a+'), userInput), daemon=True)
+    userOut.start()
+    mainGame.start()
+    try:
+        input('')
+    except KeyboardInterrupt:
+        exit()
+
 if __name__ == "__main__":
+    # testing()
     main()
