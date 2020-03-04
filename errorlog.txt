@@ -14,3 +14,6 @@ Bug: limit on characters transferred
 Fix: added translation hash map
 
 Bug: RONAK:  5♥ 5♣ 3♦ 4♥ J♣  Identified as Two Pairs!!
+
+Bug: Adding "if verbose" raises an error
+Solution: Make verbose global
