@@ -232,7 +232,10 @@ def main():
     #         deck.cards.append(PokerCard(i, j))
     # p = PokerPlayer("Yudachi", 100000000, hand)
     # print(PokerRound(p, hand))
-    PokerGame()
+    if len(sys.argv) == 2 and sys.argv[1] in ("--safe", "-s"):
+        PokerGame(safemode = True)
+    else:
+        PokerGame()
     
 if __name__ == "__main__":
     main()

@@ -104,8 +104,13 @@ def rmtouch(filename: str) -> None:
             pass
 
 def encodeStr(msg: str) -> str:
-    for k, v in python_to_fics.items():
-        msg = msg.replace(k, v)
+    try:
+        for k, v in python_to_fics.items():
+            msg = msg.replace(k, v)
+    except UnicodeEncodeError:
+        raise NotImplementedError(
+                "Your current computer can't handle unicode keys in hashmaps"
+                )
     return msg
 
 def findDifference(oglines: list, newlines: list) -> list:
