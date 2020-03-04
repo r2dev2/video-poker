@@ -24,9 +24,8 @@ from pathlib import Path
 from threading import Thread
 from time import sleep
 
-from common import numInStr, rmtouch
+from common import numInStr, rmtouch, findDifference
 from game import PokerGame
-from host import findDifference
 
 # Just because you might not have it installed
 
@@ -115,8 +114,12 @@ def handToFilePaths(hand: str) -> tuple:
         '♥': 'H',
         '♦': 'D', 
         '♣': 'C',
-        '♠': 'S'
-    }
+        '♠': 'S',
+        '@': 'H',
+        '#': 'D',
+        '&': 'C',
+        '%': 'S'
+        }
     new = []
     for s in hand.split(' '):
         if s.strip() == '':
@@ -126,7 +129,18 @@ def handToFilePaths(hand: str) -> tuple:
             news = news.replace(k, v)
         if VERBOSE: print(news)
         new.append(news)
-    return tuple(str(img / "{}.gif".format(s)) for s in new if ':' not in s)
+    return tuple(getRealPaths([str(img / "{}.gif".format(s)) for s in new]))
+
+def getRealPaths(paths: list) -> list:
+    try:
+        open(paths[0], 'rb').close()
+        p = [paths[0]]
+    except FileNotFoundError:
+        p = []
+    finally:
+        if len(paths) == 1:
+            return p
+        return p + getRealPaths(paths[1:])
 
 # Displays the cards
 # msg consists of {name}: {hand}\n{result}
@@ -180,12 +194,12 @@ def main():
     # PokerGame(cout, cin)
     rmtouch(FILEOUT)
     userOut = Thread(target=retrieveOutput, daemon=True)
-    mainGame = Thread(target=PokerGame, args=(open(FILEOUT, 'a+'), userInput), daemon=True)
+    mainGame = Thread(target=PokerGame, args=(open(FILEOUT, 'a+'), userInput, True), daemon=True)
     userOut.start()
     mainGame.start()
     while True:
         try:
-            input('')
+            mainGame.join()
         except KeyboardInterrupt:
             print()
             exit()

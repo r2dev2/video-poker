@@ -2,6 +2,8 @@ from typing import Generic
 import os
 from string import digits
 
+from translation import python_to_fics, fics_to_python
+
 # Returns indexes of all occurences within a list
 def find_all(value: Generic, biglist: list) -> list:
     indexes = []
@@ -100,6 +102,16 @@ def rmtouch(filename: str) -> None:
     finally:
         with open(filename, 'a+') as fin:
             pass
+
+def encodeStr(msg: str) -> str:
+    for k, v in python_to_fics.items():
+        msg = msg.replace(k, v)
+    return msg
+
+def findDifference(oglines: list, newlines: list) -> list:
+    if len(oglines) >= len(newlines):
+        return []
+    return findDifference(oglines, newlines[:-1]) + [newlines[-1]]
 
 if __name__ == "__main__":
     commonmain()

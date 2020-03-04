@@ -5,8 +5,7 @@ import sys
 from IO import IO
 from client import P1, P2, HOST
 from game import PokerGame, getNameInput
-from common import rmtouch, numInStr, find_all
-from translation import python_to_fics
+from common import rmtouch, numInStr, find_all, encodeStr, findDifference
 
 VERBOSE = len(sys.argv) == 2 and sys.argv[1] == "--verbose"
 UIN = "user.in"
@@ -129,15 +128,6 @@ def fileUserOutput(server: IO, filename = "1.game", recepient = P1) -> None:
                 server.tell(recepient, safestring)
         prev = new[:]
 
-def encodeStr(msg: str) -> str:
-    for k, v in python_to_fics.items():
-        msg = msg.replace(k, v)
-    return msg
-
-def findDifference(oglines: list, newlines: list) -> list:
-    if len(oglines) >= len(newlines):
-        return []
-    return findDifference(oglines, newlines[:-1]) + [newlines[-1]]
 
 def other_user(user: str) -> str:
     if user == P2:

@@ -18,6 +18,7 @@ import sys
 from poker_hand import PokerHand
 from pokercard import PokerCard
 from pokerplayer import PokerPlayer
+from common import encodeStr
 
 # These are the winning hands in order of strength
 WINNING_HANDS = [ "Royal Flush", \
@@ -134,7 +135,7 @@ def getBetInput(cin = input, cout = sys.stdout) -> int:
 # You have {money} left
 # Would you like to continue?
 # -------------------------------
-def PokerGame(cout: Generic = sys.stdout, cin = input) -> None:
+def PokerGame(cout: Generic = sys.stdout, cin = input, safemode = False) -> None:
     # Hash map for money gained per hand type
     credits_for_hand = {
         "Royal Flush" : 250,
@@ -178,7 +179,7 @@ def PokerGame(cout: Generic = sys.stdout, cin = input) -> None:
     
 # plays one round of the game
 # return string of results
-def PokerRound(player: PokerPlayer, deck: PokerHand, cout = sys.stdout, cin = input) -> str:
+def PokerRound(player: PokerPlayer, deck: PokerHand, cout = sys.stdout, cin = input, safemode = False) -> str:
     
     '''
     explanation of program logic
@@ -189,7 +190,8 @@ def PokerRound(player: PokerPlayer, deck: PokerHand, cout = sys.stdout, cin = in
     Output the hand type
     
     '''
-    print("{}:\t{}".format(player.getName(), player.hand), file = cout, flush = True)
+    h = encodeStr(str(player.hand)) if safemode else player.hand
+    print("{}:\t{}".format(player.getName(), h), file = cout, flush = True)
     rawcards = player.askHoldChoice(cin, cout).split(' ')
     cardsToHold = []
     if rawcards != ['']:
@@ -198,7 +200,8 @@ def PokerRound(player: PokerPlayer, deck: PokerHand, cout = sys.stdout, cin = in
 
     testhand = PokerHand()
     testhand.cards = cardsToHold
-    print("You held:", testhand, file = cout, flush = True)
+    th = encodeStr(str(testhand)) if safemode else testhand
+    print("You held:", th, file = cout, flush = True)
 
     #now add additional cards
     while len(cardsToHold) < 5:
@@ -208,7 +211,8 @@ def PokerRound(player: PokerPlayer, deck: PokerHand, cout = sys.stdout, cin = in
     newHand.cards = cardsToHold[:]
     #make a new poker_hand
     player.hand = newHand
-    print("%s:" % player.getName(), player.hand, file = cout, flush = True)
+    ph = encodeStr(str(player.hand)) if safemode else player.hand
+    print("%s:" % player.getName(), ph, file = cout, flush = True)
     hand_type = player.hand.handType()
     return hand_type
 
