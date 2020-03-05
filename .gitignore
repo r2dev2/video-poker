@@ -4,6 +4,7 @@ lock.lock
 *.game
 *.in
 *.out
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

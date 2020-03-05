@@ -27,16 +27,17 @@ from time import sleep
 from common import numInStr, rmtouch, findDifference
 from game import PokerGame
 
-# Just because you might not have it installed
-
+# installs easyGui
 try:
     from easygui import *
 except ImportError:
     subprocess.call([sys.executable, '-m', "pip", "install", "easygui"])
+    from easygui import *
 
 
 
 FILEOUT = "gui.out"
+#for debugging
 VERBOSE = True if len(sys.argv) == 2 and sys.argv[1] == "--verbose" else False
 timeforinput = False
 money = 0
@@ -135,6 +136,7 @@ def getRealPaths(paths: list) -> list:
     val = paths[0] if doesItExist(paths[0]) else []
     return [val] + getRealPaths(paths[1:])
 
+# Checks if a filepath exists
 def doesItExist(path):
     try:
         open(path, 'rb').close()

@@ -50,7 +50,6 @@ class PokerHand(StackOfCards):
         
         # convert cards to str and list of str
         listcards = [str(int(c)) for c in clone.cards]
-        strcards = ''.join(listcards)
 
         # Classify hand by rank
         rankclassification = countMaxOccurences(listcards)
@@ -62,19 +61,19 @@ class PokerHand(StackOfCards):
                 return "Full House"
 
         # Two Pairs
-        if rankclassification == 2 and numPairs(strcards) == 2:
+        if rankclassification == 2 and numPairs(listcards) == 2:
             return "Two Pairs"
 
         # Change pair to pair (Jacks or better)
         if rankclassification == 2:
-            jacksorbetter = is_in([11, 11], listcards) or is_in([12, 12], listcards) or \
-                is_in([13, 13], listcards) or is_in([14, 14], listcards)
+            jacksorbetter = is_in(['11', '11'], listcards) or is_in(['12', '12'], listcards) or \
+                is_in(['13', '13'], listcards) or is_in(['14', '14'], listcards)
             if not jacksorbetter:
                 rankclassification = 1
 
         # Classification is now the index of the Winning hand
         classification = WINNING_HANDS.index(
-            ["Nothing", "Pair (Jacks or better", "3 of a Kind", "Four of a Kind"][rankclassification - 1]
+            ["Nothing", "Pair (Jacks or better)", "3 of a Kind", "Four of a Kind"][rankclassification - 1]
             )
         
         # Classify hand by flush
@@ -150,13 +149,23 @@ def main():
     ]
     hand4 = PokerHand()
     hand4.cards = [
-        PokerCard("10", '♥'),
-        PokerCard("10", '♣'),
-        PokerCard("2", '♥'),
+        #5♥ 5♣ 3♦ 4♥ J♣
+        PokerCard("5", '♥'),
+        PokerCard("5", '♣'),
+        PokerCard("3", '♣'),
         PokerCard("4", '♥'),
-        PokerCard("5", '♥')
+        PokerCard("J", '♣')
     ]
-    print("hand4's type is", hand4.handType(), "it should be two pair")
+    print("hand4's type is", hand4.handType(), "it should be nothing")
+    hand5 = PokerHand()
+    hand5.cards = [
+        PokerCard('K', '♥'),
+        PokerCard('A', '♦'),
+        PokerCard('6', '♣'),
+        PokerCard('9', '♣'),
+        PokerCard('K', '♣')
+    ]
+    print("hand5's type is", hand5.handType(), "it should be Pair (Jacks or better)")
     ''' 
     "Royal Flush" : 250
     "Straight Flush" : 50
