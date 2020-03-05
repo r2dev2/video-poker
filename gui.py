@@ -105,7 +105,6 @@ def retrieveOutput():
                     if s.strip() != '': indexbox(title="Video Poker", msg=s, choices=("Next",))
                     timeforinput = True
         prev = new[:]
-# r"C:\users\labuser\Documents\video-poker\img\2C.gif"
 def getStr(msg: str) -> str:
     return enterbox(msg=msg, title="Video Poker")
 
@@ -163,7 +162,7 @@ def show_hand(msg: str):
 
 # Prompt which cards to hold in hand
 def hand_prompt(hand: str) -> str:
-    filetuple = handToFilePaths(hand)
+    filetuple = handToFilePaths(hand)#makes the group of images to output
     filelist = list(filetuple)
     uin = []
     reply = None
@@ -176,7 +175,7 @@ def hand_prompt(hand: str) -> str:
         if reply == "I'm done":
             break
         choice = str(filelist.index(reply) + 1)
-        if choice not in uin: 
+        if choice not in uin:#ensures that there are no duplicates
             uin.append(choice)
         else:
             uin.pop(uin.index(choice))
