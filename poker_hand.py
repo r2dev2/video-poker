@@ -148,7 +148,16 @@ def main():
         PokerCard("3",'♥' ),
         PokerCard("3", '♣')
     ]
-    '''
+    hand4 = PokerHand()
+    hand4.cards = [
+        PokerCard("10", '♥'),
+        PokerCard("10", '♣'),
+        PokerCard("2", '♥'),
+        PokerCard("4", '♥'),
+        PokerCard("5", '♥')
+    ]
+    print("hand4's type is", hand4.handType(), "it should be two pair")
+    ''' 
     "Royal Flush" : 250
     "Straight Flush" : 50
     "Four of a Kind" : 25
