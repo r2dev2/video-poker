@@ -65,7 +65,7 @@ def userInput(prompt):
     else:
         raise RuntimeError("prompt not found")
 
-# Based on output change the gui
+# Based on contents of FILEOUT change the gui
 def retrieveOutput():
     global timeforinput, askheld, hand, VERBOSE, money
     with open(FILEOUT, 'r') as fin:

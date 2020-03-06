@@ -3,6 +3,7 @@ import os
 from string import digits
 
 from translation import python_to_fics, fics_to_python
+import vlc
 
 # Returns indexes of all occurences within a list
 def find_all(value: Generic, biglist: list) -> list:
