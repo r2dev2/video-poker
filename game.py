@@ -178,7 +178,7 @@ def PokerGame(cout: Generic = sys.stdout, cin = input, safemode = False, audio =
         if typeOfHand == "Nothing":
             if audio:
                 bgpause()
-                playAudio(str(PWD / "Music" / "oof.mp3"))
+                pause, stop = playAudio(str(PWD / "Music" / "oof.mp3"))
             print("Nothing :( You lost.", file = cout, flush = True)
         else:
             if audio:
@@ -188,7 +188,7 @@ def PokerGame(cout: Generic = sys.stdout, cin = input, safemode = False, audio =
         print("You have %d money left" % player.getMoney(), file = cout, flush = True)
         if not willContinue(cin):
             break
-        if audio and typeOfHand != "Nothing":
+        if audio:
             bgpause()
             stop()
         deck, player = gameinit(name, player.getMoney())
