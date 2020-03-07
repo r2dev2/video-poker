@@ -5,7 +5,7 @@ lock.lock
 *.in
 *.out
 .vscode/
-*.mp3
+Music/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
