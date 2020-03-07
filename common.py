@@ -119,5 +119,15 @@ def findDifference(oglines: list, newlines: list) -> list:
         return []
     return findDifference(oglines, newlines[:-1]) + [newlines[-1]]
 
+# Checks if a filepath exists
+def doesItExist(path: str) -> bool:
+    try:
+        open(path, 'rb').close()
+        exists = True
+    except FileNotFoundError:
+        exists = False
+    finally:
+        return exists
+
 if __name__ == "__main__":
     commonmain()

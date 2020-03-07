@@ -24,7 +24,7 @@ from pathlib import Path
 from threading import Thread
 from time import sleep
 
-from common import numInStr, rmtouch, findDifference
+from common import numInStr, rmtouch, findDifference, doesItExist
 from game import PokerGame
 
 # installs easyGui
@@ -134,16 +134,6 @@ def getRealPaths(paths: list) -> list:
         return paths if doesItExist(paths[0]) else [] 
     val = paths[0] if doesItExist(paths[0]) else []
     return [val] + getRealPaths(paths[1:])
-
-# Checks if a filepath exists
-def doesItExist(path):
-    try:
-        open(path, 'rb').close()
-        exists = True
-    except FileNotFoundError:
-        exists = False
-    finally:
-        return exists
 
 # Displays the cards
 # msg consists of {name}: {hand}\n{result}
