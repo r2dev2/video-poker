@@ -62,7 +62,7 @@ def numPairs(ilst: list) -> int:
         # if the character isn't in blacklist
         # increment pair based upon whether there is a pair
         if c not in blacklist:
-            haspair = ilst.count(c * 2) == 1
+            haspair = is_in([c, c], ilst)
             pair += int(haspair)
             blacklist.append(c)
     # if there are 4 occurences of anything, should return 2

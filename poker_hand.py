@@ -166,6 +166,16 @@ def main():
         PokerCard('K', '♣')
     ]
     print("hand5's type is", hand5.handType(), "it should be Pair (Jacks or better)")
+
+    hand6 = PokerHand()
+    hand6.cards = [
+        PokerCard('2', '♠'),
+        PokerCard('2', '♥'),
+        PokerCard('10', '♦'),
+        PokerCard('10', '♥'),
+        PokerCard('J', '♦')
+    ]
+    print("hand6's type is", hand6.handType(), "it should be Two Pairs")
     ''' 
     "Royal Flush" : 250
     "Straight Flush" : 50
