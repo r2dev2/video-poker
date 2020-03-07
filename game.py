@@ -10,7 +10,8 @@ Description: Classes are done
 # Ronak Badhe, Karthik Bhattaram
 # IMPORTANT: won't work on python < 3.5 due to type annotations and Pathlib
 # IMPORTANT: GUI will install easygui module with pip if not installed
-# Snapshot 4 comment: Finished gui, bugs persist in handType()
+# Snapshot 5 comment: Made stuff less sketchy, added setup.copy()
+# Snapshot 5: currently testing if all methods are there
 
 import os
 import sys
@@ -171,7 +172,7 @@ def PokerGame(cout: Generic = sys.stdout, cin = input, safemode = False, audio =
     while player.getMoney() > 0:
         print(file = cout)
         bet = getBetInput(cin)
-        typeOfHand = PokerRound(player, deck, cout, cin, safemode)
+        typeOfHand = playRound(player, deck, cout, cin, safemode)
         moneywon = bet * credits_for_hand[typeOfHand]
         player.addMoney(moneywon)
         if typeOfHand == "Nothing":
@@ -195,7 +196,7 @@ def PokerGame(cout: Generic = sys.stdout, cin = input, safemode = False, audio =
     
 # plays one round of the game
 # return string of results
-def PokerRound(player: PokerPlayer, deck: PokerHand, cout = sys.stdout, cin = input, safemode = False) -> str:
+def playRound(player: PokerPlayer, deck: PokerHand, cout = sys.stdout, cin = input, safemode = False) -> str:
     
     '''
     explanation of program logic
