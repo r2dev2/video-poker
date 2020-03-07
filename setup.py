@@ -4,7 +4,16 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from common import doesItExist
+# Checks if a filepath exists
+# When imported from common, it was throwing vlc import error
+def doesItExist(path: str) -> bool:
+    try:
+        open(path, 'rb').close()
+        exists = True
+    except FileNotFoundError:
+        exists = False
+    finally:
+        return exists
 
 def install(name: str) -> None:
     subprocess.call([sys.executable, '-m', 'pip', 'install', name])
