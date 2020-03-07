@@ -187,7 +187,7 @@ def main():
     # PokerGame(cout, cin)
     rmtouch(FILEOUT)
     userOut = Thread(target=retrieveOutput, daemon=True)
-    mainGame = Thread(target=PokerGame, args=(open(FILEOUT, 'a+'), userInput, True), daemon=True)
+    mainGame = Thread(target=PokerGame, args=(open(FILEOUT, 'a+'), userInput, True, True), daemon=True)
     userOut.start()
     mainGame.start()
     while True:

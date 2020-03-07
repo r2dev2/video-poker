@@ -1,9 +1,12 @@
-from typing import Generic
 import os
 from string import digits
+from time import sleep
+from typing import Callable, Generic
 
-from translation import python_to_fics, fics_to_python
 import vlc
+
+from translation import fics_to_python, python_to_fics
+
 
 # Returns indexes of all occurences within a list
 def find_all(value: Generic, biglist: list) -> list:
@@ -128,6 +131,12 @@ def doesItExist(path: str) -> bool:
         exists = False
     finally:
         return exists
+
+# Plays an audio file, returns pause and stop methods
+def playAudio(path: str) -> tuple:
+    player = vlc.MediaPlayer(path)
+    player.play()
+    return player.pause, player.stop
 
 if __name__ == "__main__":
     commonmain()

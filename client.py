@@ -2,8 +2,8 @@ import os
 from threading import Thread
 from time import sleep
 
-from IO import IO
 from game import intinput
+from IO import IO
 from translation import fics_to_python
 
 # Name constants

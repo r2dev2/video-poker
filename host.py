@@ -1,11 +1,11 @@
-from time import sleep
-from threading import Thread
 import sys
+from threading import Thread
+from time import sleep
 
-from IO import IO
-from client import P1, P2, HOST
+from client import HOST, P1, P2
+from common import encodeStr, find_all, findDifference, numInStr, rmtouch
 from game import PokerGame, getNameInput
-from common import rmtouch, numInStr, find_all, encodeStr, findDifference
+from IO import IO
 
 VERBOSE = len(sys.argv) == 2 and sys.argv[1] == "--verbose"
 UIN = "user.in"

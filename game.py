@@ -12,13 +12,15 @@ Description: Classes are done
 # IMPORTANT: GUI will install easygui module with pip if not installed
 # Snapshot 4 comment: Finished gui, bugs persist in handType()
 
-from typing import Callable, Generic
+import os
 import sys
+from pathlib import Path
+from typing import Callable, Generic
 
+from common import encodeStr, playAudio
 from poker_hand import PokerHand
 from pokercard import PokerCard
 from pokerplayer import PokerPlayer
-from common import encodeStr
 
 # These are the winning hands in order of strength
 WINNING_HANDS = [ "Royal Flush", \
@@ -30,6 +32,8 @@ WINNING_HANDS = [ "Royal Flush", \
                   "3 of a Kind", \
                   "Two Pairs", \
                   "Pair (Jacks or better)" ]
+
+PWD = Path(os.getcwd())
 
 def inputFunc(prompt) -> str:
     return input(prompt)
@@ -135,7 +139,10 @@ def getBetInput(cin = input, cout = sys.stdout) -> int:
 # You have {money} left
 # Would you like to continue?
 # -------------------------------
-def PokerGame(cout: Generic = sys.stdout, cin = input, safemode = False) -> None:
+def PokerGame(cout: Generic = sys.stdout, cin = input, safemode = False, audio = False) -> None:
+    if audio: 
+        bgpause, bgstop = playAudio(str(PWD / "Music" / "minecraft.mp3"))
+
     # Hash map for money gained per hand type
     credits_for_hand = {
         "Royal Flush" : 250,
@@ -168,12 +175,21 @@ def PokerGame(cout: Generic = sys.stdout, cin = input, safemode = False) -> None
         moneywon = bet * credits_for_hand[typeOfHand]
         player.addMoney(moneywon)
         if typeOfHand == "Nothing":
+            if audio:
+                bgpause()
+                playAudio(str(PWD / "Music" / "oof.mp3"))
             print("Nothing :( You lost.", file = cout, flush = True)
         else:
+            if audio:
+                bgpause()
+                pause, stop = playAudio(str(PWD / "Music" / "giorno.mp3"))
             print(typeOfHand + "!!", "You won", moneywon, file = cout, flush = True)
         print("You have %d money left" % player.getMoney(), file = cout, flush = True)
         if not willContinue(cin):
             break
+        if audio and typeOfHand != "Nothing":
+            bgpause()
+            stop()
         deck, player = gameinit(name, player.getMoney())
     
     
@@ -232,13 +248,12 @@ def main():
     #         deck.cards.append(PokerCard(i, j))
     # p = PokerPlayer("Yudachi", 100000000, hand)
     # print(PokerRound(p, hand))
-    if len(sys.argv) == 2 and sys.argv[1] in ("--safe", "-s"):
+    if "--safe" in sys.argv or '-s' in sys.argv:
         PokerGame(safemode = True)
+    elif "--audio" in sys.argv or '-a' in sys.argv:
+        PokerGame(audio=True)
     else:
         PokerGame()
     
 if __name__ == "__main__":
     main()
-    
-        
-
