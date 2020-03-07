@@ -42,9 +42,11 @@ def stopAllThreads(filename = "lock.lock") -> None:
 def resetLock(filename = "lock.lock") -> None:
     os.remove(filename)
 
+# Abstraction, could be used to incorporate GUI
 def printOutput(msg: str) -> None:
     print(msg)
 
+# Receiving thread of client
 def client_receive(server: IO) -> None:
     outputlog = open("client.log", 'a+')
     receiving = False
@@ -69,8 +71,10 @@ def client_receive(server: IO) -> None:
         msg = msg.replace('fi', '')
         if msg != '': printOutput(msg)
         # print("Yeetus the deletus", flush=True)
+        # Caused weird Unicode errors
         # print(msg, file = outputlog, flush = True)
 
+# Main send thread of client
 def client_send(server: IO, other: str):
     print("Sending has started")
     while not shouldExit():
@@ -84,6 +88,7 @@ def client_send(server: IO, other: str):
         except UnicodeEncodeError:
             print("Enter a unicode please")
 
+# Returns usernames of player and opponent
 def getUser() -> (str, str):
     ipt = intinput(
         "Player 1 or 2? ",

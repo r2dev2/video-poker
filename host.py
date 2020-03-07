@@ -35,6 +35,7 @@ def main() -> None:
             print("\nCaught signal, exiting")
             exit()
 
+# Otherwise, the server does whack stuff when asking name
 def nameFix(server: IO) -> None:
     server.tell(P1, encodeStr("What is your name? "))
     server.tell(P2, encodeStr("What is your name? "))
@@ -57,6 +58,7 @@ def game(user: str, gamefile: str, server: IO) -> Thread:
     main.start()
     return main
     
+# Checks if the Game is over, exits when the game is over
 def gameIsOver(gameThread: list, filenames: list, server: IO) -> None:
     scores = []
     for gt in gameThread:

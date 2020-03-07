@@ -24,21 +24,14 @@ from pathlib import Path
 from threading import Thread
 from time import sleep
 
-from common import numInStr, rmtouch, findDifference, doesItExist
+from easygui import buttonbox, ccbox, enterbox, indexbox
+
+from common import doesItExist, findDifference, numInStr, rmtouch
 from game import PokerGame
-
-# installs easyGui
-try:
-    from easygui import *
-except ImportError:
-    subprocess.call([sys.executable, '-m', "pip", "install", "easygui"])
-    from easygui import *
-
-
 
 FILEOUT = "gui.out"
 #for debugging
-VERBOSE = True if len(sys.argv) == 2 and sys.argv[1] == "--verbose" else False
+VERBOSE = True if "--verbose" in sys.argv else False
 timeforinput = False
 money = 0
 askheld = False
@@ -58,7 +51,7 @@ def userInput(prompt):
         if ccbox(title="Video Poker", msg="You have %d money" % money):
             return 'Y'
         print("You have finished with %d money." % money)
-        raise KeyboardInterrupt("Finish stuff")
+        exit()
     elif "hold?" in prompt:
         askheld = True
         return hand_prompt(hand)
@@ -71,6 +64,8 @@ def retrieveOutput():
     with open(FILEOUT, 'r') as fin:
         prev = fin.readlines()
     while True:
+        # If there is a difference between the previous latest output
+        # and current latest output, proceed
         sleep(.1)
         with open(FILEOUT, 'r') as fin:
             new = fin.readlines()
@@ -85,6 +80,7 @@ def retrieveOutput():
                     if not askheld:
                         hand = s.split('\t')[1]
                         continue
+                    # Iterate until "won" or "lost" are found in the file
                     n = True
                     while n:
                         with open(FILEOUT, 'r') as fin:
@@ -102,14 +98,18 @@ def retrieveOutput():
                     continue
                 # Generic output
                 else:
-                    if s.strip() != '': indexbox(title="Video Poker", msg=s, choices=("Next",))
+                    if s.strip() != '': indexbox(title="Video Poker", msg=s, choices=("N[e]xt",))
                     timeforinput = True
         prev = new[:]
+
+# Equivalent of input() but for gui
 def getStr(msg: str) -> str:
     return enterbox(msg=msg, title="Video Poker")
 
+# Given a hand such as "10@ 3#", returns the absolute file path of the images of each card
 def handToFilePaths(hand: str) -> tuple:
     img = Path(os.getcwd()) / "img"
+    # Output code to file name hash map
     translations = {
         '♥': 'H',
         '♦': 'D', 
@@ -129,6 +129,7 @@ def handToFilePaths(hand: str) -> tuple:
         new.append(s)
     return tuple(getRealPaths([str(img / "{}.gif".format(s)) for s in new]))
 
+# Returns the real paths of a list
 def getRealPaths(paths: list) -> list:
     if len(paths) <= 1:
         return paths if doesItExist(paths[0]) else [] 
@@ -145,8 +146,10 @@ def show_hand(msg: str):
     try:
         indexbox(msg=msg[msg.find('\n')+1:], 
             image = filetuple, 
-            choices = ("Next",)
+            choices = ("N[e]xt",)
             )
+    # EasyGUI does some assertion error stuff which breaks our code
+    # So we decided to break it :)
     except AssertionError:
         pass
 
@@ -164,10 +167,13 @@ def hand_prompt(hand: str) -> str:
             )
         if reply == "I'm done":
             break
+        # Converts the filepath to the index of the card in the user's hand
         choice = str(filelist.index(reply) + 1)
-        if choice not in uin:#ensures that there are no duplicates
+        # Ensures that there are no duplicates
+        if choice not in uin:
             uin.append(choice)
         else:
+            # Adds functionality of being able to deselect card
             uin.pop(uin.index(choice))
     uinstr = ' '.join(uin)
     if VERBOSE: print(uinstr)
@@ -183,11 +189,11 @@ def hand_prompt(hand: str) -> str:
 #     hand_prompt("7♣ 7♠ 5♠ 9♦ J♦ ")
 #     genericOutput("Kartrhritis")
 
-def main():
+def main(audio=False):
     # PokerGame(cout, cin)
     rmtouch(FILEOUT)
     userOut = Thread(target=retrieveOutput, daemon=True)
-    mainGame = Thread(target=PokerGame, args=(open(FILEOUT, 'a+'), userInput, True, True), daemon=True)
+    mainGame = Thread(target=PokerGame, args=(open(FILEOUT, 'a+'), userInput, True, audio), daemon=True)
     userOut.start()
     mainGame.start()
     while True:
@@ -196,10 +202,14 @@ def main():
         except KeyboardInterrupt:
             print()
             exit()
+        exit()
         
 if __name__ == "__main__":
     # testing()
-    main()
+    if "--audio" in sys.argv or "-a" in sys.argv:
+        main(True)
+    else:
+        main()
 
 # from gui import *
 # video = r"C:\Users\labuser\Documents\poker\img\2C.gif"
