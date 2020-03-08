@@ -3,8 +3,6 @@ from string import digits
 from time import sleep
 from typing import Callable, Generic
 
-import vlc
-
 from translation import fics_to_python, python_to_fics
 
 
@@ -62,12 +60,12 @@ def numPairs(ilst: list) -> int:
         # if the character isn't in blacklist
         # increment pair based upon whether there is a pair
         if c not in blacklist:
-            haspair = is_in([c, c], ilst)
+            haspair = is_in([c]*2, ilst)
             pair += int(haspair)
             blacklist.append(c)
     # if there are 4 occurences of anything, should return 2
     for c in blacklist:
-        if ilst.count(c*4) == 1:
+        if ilst.count([c]*4) == 1:
             return 2
     return pair
 
@@ -131,12 +129,6 @@ def doesItExist(path: str) -> bool:
         exists = False
     finally:
         return exists
-
-# Plays an audio file, returns pause and stop methods
-def playAudio(path: str) -> tuple:
-    player = vlc.MediaPlayer(path)
-    player.play()
-    return player.pause, player.stop
 
 if __name__ == "__main__":
     commonmain()

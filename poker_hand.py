@@ -1,8 +1,8 @@
 from copy import deepcopy
 
-from stack_of_cards import StackOfCards
-from pokercard import PokerCard
 from common import *
+from pokercard import PokerCard
+from stack_of_cards import StackOfCards
 
 # For reference
 WINNING_HANDS = [ "Royal Flush",

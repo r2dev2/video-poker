@@ -18,7 +18,7 @@ import sys
 from pathlib import Path
 from typing import Callable, Generic
 
-from common import encodeStr, playAudio
+from common import encodeStr
 from poker_hand import PokerHand
 from pokercard import PokerCard
 from pokerplayer import PokerPlayer
@@ -35,6 +35,16 @@ WINNING_HANDS = [ "Royal Flush", \
                   "Pair (Jacks or better)" ]
 
 PWD = Path(os.getcwd())
+
+# Plays an audio file, returns pause and stop methods
+# Moved from common because some users don't run setup.py
+# Import vlc in here to simplify things, I know it is bad practice
+# but so is running a python program without running setup.py
+def playAudio(path: str) -> tuple:
+    import vlc
+    player = vlc.MediaPlayer(path)
+    player.play()
+    return player.pause, player.stop
 
 def inputFunc(prompt) -> str:
     return input(prompt)

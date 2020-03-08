@@ -1,8 +1,9 @@
-import sys
 import os
 import shutil
 import subprocess
+import sys
 from pathlib import Path
+
 
 # Checks if a filepath exists
 # When imported from common, it was throwing vlc import error
