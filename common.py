@@ -69,32 +69,6 @@ def numPairs(ilst: list) -> int:
             return 2
     return pair
 
-# returns a generator; I don't know how to type annotate that
-# format of (returned value, pass status)
-def testCountMaxOccurences() -> Generic:
-    tests = [
-        list("1222331"),
-        list("123421"),
-        list("736122"),
-        ['12', '12', '12', '12', '10'],
-        ['11', '13', '13', '13', '13']
-    ]
-    expectedresults = [
-        3,
-        1,
-        2,
-        4,
-        4
-    ]
-
-    for index, t in enumerate(tests):
-        result = countMaxOccurences(t)
-        yield result, result == expectedresults[index] 
-
-def commonmain():
-    for ispass in testCountMaxOccurences():
-        print(ispass)
-
 # Removes a file and does equivalent of ``touch filename``
 def rmtouch(filename: str) -> None:
     try:
@@ -129,6 +103,3 @@ def doesItExist(path: str) -> bool:
         exists = False
     finally:
         return exists
-
-if __name__ == "__main__":
-    commonmain()

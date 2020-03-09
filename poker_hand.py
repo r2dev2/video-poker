@@ -81,13 +81,14 @@ class PokerHand(StackOfCards):
         isstraight = True
         for i, card in enumerate(listcards):
             rank = int(card)
-            # avoid index out of bounds
+            # Avoid index out of bounds
             if i == len(listcards) - 1:
                 break
-            # see if cards are sequential
+            # See if cards are sequential
             trueforcurrentcard = rank + 1 == int(listcards[i + 1])
-            if not trueforcurrentcard and i == len(listcards) - 2 and int(listcards[-1]) == '14':
-                trueforcurrentcard = listcards[0] == 2
+            # Necessary for counting wrap around as straight
+            if not trueforcurrentcard and listcards[0] == '2' and listcards[-1] == '14':
+                continue
             if not trueforcurrentcard:
                 isstraight = False
                 break
@@ -176,6 +177,38 @@ def main():
         PokerCard('J', '♦')
     ]
     print("hand6's type is", hand6.handType(), "it should be Two Pairs")
+
+    hand7 = PokerHand()
+    hand7.cards = [
+        PokerCard('10', '♠'),
+        PokerCard('2', '♠'),
+        PokerCard('4', '♠'),
+        PokerCard('6', '♠'),
+        PokerCard('8', '♠')
+    ]
+    print("hand7's type is", hand7.handType(), "it should be Flush")
+
+    hand8 = PokerHand()
+    hand8.cards = [
+        PokerCard('2', '♠'),
+        PokerCard('A', '♠'),
+        PokerCard('K', '♠'),
+        PokerCard('Q', '♠'),
+        PokerCard('J', '♠')
+    ]
+
+    print("hand8's type is", hand8.handType(), "it should be Royal Flush") # TODO: fix
+
+    hand9 = PokerHand()
+    hand9.cards = [
+        PokerCard('2', '♠'),
+        PokerCard('A', '♥'),
+        PokerCard('K', '♠'),
+        PokerCard('Q', '♥'),
+        PokerCard('J', '♠')
+    ]
+
+    print("hand9's type is", hand9.handType(), "it should be Straight") # TODO: fix
     ''' 
     "Royal Flush" : 250
     "Straight Flush" : 50
