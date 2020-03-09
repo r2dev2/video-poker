@@ -10,8 +10,7 @@ Description: Classes are done
 # Ronak Badhe, Karthik Bhattaram
 # IMPORTANT: won't work on python < 3.5 due to type annotations and Pathlib
 # IMPORTANT: GUI will install easygui module with pip if not installed
-# Snapshot 5 comment: Made stuff less sketchy, added setup.copy()
-# Snapshot 5: currently testing if all methods are there
+# FINAL SUBMISSION: made some stuff readable
 
 import os
 import sys
