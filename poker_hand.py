@@ -109,7 +109,7 @@ def is_straight(lcards: list) -> bool:
         # See if cards are sequential
         trueforcurrentcard = rank + 1 == int(lcards[i + 1])
         # Necessary for counting wrap around as straight
-        if not trueforcurrentcard and lcards[0] == '2' and lcards[-1] == '14':
+        if not trueforcurrentcard and lcards[0] == '2' and lcards[-1] == '14' and i == 0:
             continue
         if not trueforcurrentcard:
             isstraight = False
