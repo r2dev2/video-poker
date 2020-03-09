@@ -48,7 +48,7 @@ def userInput(prompt):
         return getStr(prompt)
     elif "Shall" in prompt:
         if VERBOSE: print("Printing")
-        if ccbox(title="Video Poker", msg="You have %d money" % money):
+        if ccbox(title="Video Poker", msg="You have %d money\nWould you like to continue?" % money):
             return 'Y'
         print("You have finished with %d money." % money)
         exit()
@@ -57,6 +57,19 @@ def userInput(prompt):
         return hand_prompt(hand)
     else:
         raise RuntimeError("prompt not found")
+
+# Iterate until "won" or "lost" are found in the file
+# Returns the new contents of file
+def wonOrLost(s: str, filename: str) -> list:
+    n = True
+    while n:
+        with open(filename, 'r') as fin:
+            new = fin.readlines()
+        if "won" in new[-2] or "lost" in new[-2]:
+            show_hand(s + new[-2])
+            n = False
+            new = new[:-1] 
+    return new
 
 # Based on contents of FILEOUT change the gui
 def retrieveOutput():
@@ -81,14 +94,7 @@ def retrieveOutput():
                         hand = s.split('\t')[1]
                         continue
                     # Iterate until "won" or "lost" are found in the file
-                    n = True
-                    while n:
-                        with open(FILEOUT, 'r') as fin:
-                            new = fin.readlines()
-                        if "won" in new[-2] or "lost" in new[-2]:
-                            show_hand(s + new[-2])
-                            n = False
-                            new = new[:-1] 
+                    new = wonOrLost(s, FILEOUT)
                     askheld = False
                 elif "money left" in s:
                     money = numInStr(s)
