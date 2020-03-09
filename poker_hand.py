@@ -78,20 +78,7 @@ class PokerHand(StackOfCards):
         
         # Classify hand by flush
         # Straight, not a flush
-        isstraight = True
-        for i, card in enumerate(listcards):
-            rank = int(card)
-            # Avoid index out of bounds
-            if i == len(listcards) - 1:
-                break
-            # See if cards are sequential
-            trueforcurrentcard = rank + 1 == int(listcards[i + 1])
-            # Necessary for counting wrap around as straight
-            if not trueforcurrentcard and listcards[0] == '2' and listcards[-1] == '14':
-                continue
-            if not trueforcurrentcard:
-                isstraight = False
-                break
+        isstraight = is_straight(listcards[:])
         if isstraight and classification > 5:
             classification = 5
 
@@ -112,6 +99,22 @@ class PokerHand(StackOfCards):
 
         return WINNING_HANDS[classification]
 
+def is_straight(lcards: list) -> bool:
+    isstraight = True
+    for i, card in enumerate(lcards):
+        rank = int(card)
+        # Avoid index out of bounds
+        if i == len(lcards) - 1:
+            break
+        # See if cards are sequential
+        trueforcurrentcard = rank + 1 == int(lcards[i + 1])
+        # Necessary for counting wrap around as straight
+        if not trueforcurrentcard and lcards[0] == '2' and lcards[-1] == '14':
+            continue
+        if not trueforcurrentcard:
+            isstraight = False
+            break
+    return isstraight
 
 def main():
     #suits: SUIT = ['♥', '♦', '♣', '♠']

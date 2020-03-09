@@ -1,3 +1,6 @@
+import os
+from pathlib import Path
+
 import client
 import common
 import game
@@ -9,6 +12,24 @@ import pokercard
 import pokerplayer
 import translation
 
+
+YEET = True
+
+class charStream():
+    def __init__(self):
+        self.contents = ''
+
+    def write(self, msg):
+        self.contents += msg
+
+    def flush(self):
+        pass
+    
+    def read(self, lineno):
+        return self.contents.split('\n')[lineno]
+
+    def readlines(self):
+        return self.contents.split()('\n')
 
 # returns a generator
 # format of (returned value, pass status)
@@ -40,9 +61,9 @@ def testFindAll():
         (3, [3, 3, 3])
     ]
     expected = [
-        1,
-        2,
-        3
+        [0],
+        [1, 4],
+        [0, 1, 2]
     ]
     for t, e in zip(tests, expected):
         result = common.find_all(t[0], t[1])
@@ -91,27 +112,73 @@ def testNumPairs():
     ]
     expected = [
         1,
-        2,
+        1, # function assumes that the list is sorted
         2
     ]
     for t, e in zip(tests, expected):
         result = common.numPairs(t)
         yield result, result == e
 
+# Client exiting support
+def testClientExit():
+    client.stopAllThreads()
+    result = client.shouldExit()
+    yield result, result
+    client.resetLock()
+
+# Test intinput
+def testIntInput():
+    stream = charStream()
+    def cin(prompt):
+        global YEET
+        if YEET:
+            YEET = False
+            return '9'
+        return '0'
+    result = game.intinput(
+        "Test this please",
+        lambda x: x == 0,
+        cinput = cin,
+        cout = stream
+    )
+    print(stream.contents)
+    yield result, result == 0
+
+# Tests gui.handToFilepaths
+def testHandToFilePaths():
+    PWD = Path(os.getcwd())
+    tests = [
+        "10@ 3# ",
+        "10# 5& "
+    ]
+    expected = [
+        (str(PWD / "img" / "10H.gif"), str(PWD / "img" / "3D.gif")),
+        (str(PWD / "img" / "10D.gif"), str(PWD / "img" / "5C.gif"))
+    ]
+    for t, e in zip(tests, expected):
+        result = gui.handToFilePaths(t)
+        yield result, result == e
+
 # Runs a testing function
 def runTest(f, name):
     print(name, "testing")
     gen = f()
-    for result, ispass in testCountMaxOccurences():
-        print(result, ispass)
+    for result, ispass in f():
+        print(result, ispass, sep = '\t')
     print()
 
 def main():
-    runTest(testCountMaxOccurences, "Max Occurences testing")
-    runTest(testFindAll, "Find All testing")
-    runTest(testNumInStr, "Num in Str testing")
-    runTest(testIsIn, "Is in testing")
-    runTest(testNumPairs, "Num Pairs testing")
+    print("Testing:")
+    print("Returned value\texpected")
+    print("Push enter for next test")
+    runTest(testCountMaxOccurences, "Max Occurences")
+    runTest(testFindAll, "Find All")
+    runTest(testNumInStr, "Num in Str")
+    runTest(testIsIn, "Is in")
+    runTest(testNumPairs, "Num Pairs")
+    runTest(testClientExit, "Client exit")
+    runTest(testIntInput, "Int input")
+    runTest(testHandToFilePaths, "Hand to filepaths")
 
 if __name__ == "__main__":
     main()
