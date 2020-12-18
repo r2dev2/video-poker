@@ -1,6 +1,6 @@
 # video-poker
 
-Video poker project for Lynbrook Intro to CS.
+Video poker project for Lynbrook Intro to CS. This supports a graphical user interface, audio, and online multiplayer.
 
 ## Setup
 
