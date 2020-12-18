@@ -52,4 +52,4 @@ python3 gui.py --audio
 
 * This project was made in an introduction to computer science class. Because of this, the code quality is not up to great standards.
 * If running with audio is not working on your computer, you need to install vlc media player of the same version as your python. Example: for 32 bit python, you need 32 bit vlc.
-* The multiplayer funcitonality uses predefined accounts on the Free Internet Chess Server. Therefore, two people cannot run the multiplayer at the same time. We did not know about servers during this project.
+* The multiplayer funcitonality uses predefined accounts on the Free Internet Chess Server. Therefore, two people cannot run the multiplayer at the same time. To change the anonymous accounts used, change the constants in ``host.py``. We did not know about servers during this project.
